@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/saved_movies"
+            android:icon="@drawable/ic_local_movies_black_24dp"
+            android:title="Saved Movies" />
+        <item
+            android:id="@+id/saved_series"
+            android:icon="@drawable/ic_live_tv_black_24dp"
+            android:title="Saved Series" />
+        <item
+            android:id="@+id/saved_people"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Saved People" />
+    </group>
+
+    <item android:title="Comminicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_share_black_24dp"
+                android:title="Share" />
+            <item
+                android:id="@+id/send"
+                android:icon="@drawable/ic_send_black_24dp"
+                android:title="Send" />
+
+        </menu>
+
+
+    </item>
+
+</menu>

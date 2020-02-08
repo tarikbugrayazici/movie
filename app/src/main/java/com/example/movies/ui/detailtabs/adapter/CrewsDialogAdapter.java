@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
 import com.example.movies.data.entity.Crew;
+import com.example.movies.data.enums.GenderImage;
 
 
 import java.util.ArrayList;
@@ -35,25 +36,28 @@ public class CrewsDialogAdapter extends RecyclerView.Adapter<CrewsDialogAdapter.
     public void onBindViewHolder(@NonNull CrewsDialogAdapter.CrewsViewHolder holder, int position) {
         final Crew crew = list.get(position);
         String url = "https://image.tmdb.org/t/p/w500";
-        if (crew.getGender() == 1) {
+
+        if (crew.getProfile_path() != null){
+            url += crew.getProfile_path();
+
             Glide.with(context)
-                    .load(url + crew.getProfile_path())
+                    .load(url)
                     .placeholder(R.drawable.female)
                     .centerCrop()
                     .into(holder.imageView);
-        } else if (crew.getGender() == 2) {
-            Glide.with(context)
-                    .load(url + crew.getProfile_path())
-                    .placeholder(R.drawable.male)
-                    .centerCrop()
-                    .into(holder.imageView);
-        } else {
-            Glide.with(context)
-                    .load(url + crew.getProfile_path())
-                    .placeholder(R.drawable.male)
-                    .centerCrop()
-                    .into(holder.imageView);
+        }else {
+            int profilePhoto = R.drawable.male;
+
+            if (crew.getGender() == GenderImage.MALE.getGenderImage()){
+                profilePhoto = R.drawable.male;
+            }else if (crew.getGender() == GenderImage.FEMALE.getGenderImage()){
+                profilePhoto = R.drawable.female;
+            }
+
+            holder.imageView.setImageResource(profilePhoto);
         }
+
+
         holder.crewName.setText(crew.getName());
         holder.crewDepartment.setText(crew.getDepartment());
     }

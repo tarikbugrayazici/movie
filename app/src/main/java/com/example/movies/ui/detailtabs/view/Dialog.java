@@ -1,11 +1,14 @@
 package com.example.movies.ui.detailtabs.view;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 
 public class Dialog extends AppCompatDialogFragment {
+
 
     private String[] list = {"Öncelikli", "İsim", "Karakter"};
 
@@ -16,6 +19,11 @@ public class Dialog extends AppCompatDialogFragment {
                 .setItems(list, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences sharedPreferences = getContext().getSharedPreferences("sorting", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("key", which);
+                        editor.apply();
+
                         switch (which) {
                             case 0:
                                 sendBackResult(which);

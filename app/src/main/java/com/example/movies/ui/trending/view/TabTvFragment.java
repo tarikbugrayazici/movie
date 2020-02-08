@@ -2,46 +2,41 @@ package com.example.movies.ui.trending.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 
 import com.example.movies.R;
+import com.example.movies.core.base.BaseFragment;
 import com.example.movies.data.entity.BaseEntity;
 import com.example.movies.data.entity.Movie;
-import com.example.movies.data.service.API;
-import com.example.movies.data.entity.BaseEntityTrending;
+import com.example.movies.data.entity.Result;
 import com.example.movies.data.service.RetroFitService;
-import com.example.movies.data.entity.Trending;
 import com.example.movies.ui.trending.adapter.TabTvAdapter;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import butterknife.BindView;
+import butterknife.Unbinder;
 
 
-public class TabTvFragment extends Fragment {
+public class TabTvFragment extends BaseFragment {
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    Unbinder unbinder;
     private TabTvAdapter adapter;
     private ArrayList<Movie> trendings = new ArrayList<>();
-    private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
     private boolean isLoadingShowed = false;
     private int pagination = 1;
     private int sizeOfPage = 0;
+    RetroFitService service = new RetroFitService();
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_layout, container, false);
+    public Integer getFragmentLayoutId() {
+        return R.layout.fragment_layout;
     }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -49,7 +44,7 @@ public class TabTvFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view);
         setRecyclerView();
         initScrollListener();
-        fetchTv();
+        fetchTabTv();
     }
 
     private void initScrollListener() {
@@ -76,31 +71,25 @@ public class TabTvFragment extends Fragment {
         pagination++;
         trendings.add(null);
         adapter.notifyDataSetChanged();
-        fetchTv();
+        fetchTabTv();
     }
 
 
-    private void fetchTv() {
-        API retrofit = RetroFitService.getRetrofit().create(API.class);
-        Call<BaseEntity> call = retrofit.getTrendTv("788a71cfbb2953df3cc3b1e7531ef259");
-        call.enqueue(new Callback<BaseEntity>() {
+    private void fetchTabTv() {
+        RetroFitService.ResultCallBack serviceCallBack = new RetroFitService.ResultCallBack() {
             @Override
-            public void onResponse(@NonNull Call<BaseEntity> call, @NonNull Response<BaseEntity> response) {
-                if (response.body() != null
-                        || (response.body() != null ? response.body().getResults() : null) != null
-                        && (pagination == 1 || sizeOfPage == response.body().getResults().size())) {
-                    setData(response.body().getResults());
+            public void getResult(Result result) {
+                Result<BaseEntity> baseEntityResult = result;
+                if (baseEntityResult.getData() != null ||
+                        (baseEntityResult.getData() != null ? baseEntityResult.getData().getResults() : null) != null
+                                && (pagination == 1 || sizeOfPage == baseEntityResult.getData().getResults().size())) {
+                    setData(baseEntityResult.getData().getResults());
                 } else {
                     setLoadingCase();
-                    Toast.makeText(getActivity(), "End of the list", Toast.LENGTH_LONG).show();
                 }
             }
-
-            @Override
-            public void onFailure(@NonNull Call<BaseEntity> call, @NonNull Throwable t) {
-                System.out.println("hataaaaaaaaaaaa");
-            }
-        });
+        };
+        service.fetchTabTv(serviceCallBack);
     }
 
     private void setRecyclerView() {

@@ -1,7 +1,6 @@
 package com.example.movies.ui.trending.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,18 +9,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.navigation.Navigation;
 import com.example.movies.data.entity.Movie;
-import com.example.movies.data.entity.Trending;
-import com.example.movies.ui.detail.DetailActivity;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class TabMovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+
 
     private Context context;
     private ArrayList<Movie> list;
@@ -49,13 +50,11 @@ public class TabMovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final Movie movie = list.get(position);
             String url = "https://image.tmdb.org/t/p/w500";
             Glide.with(context).load(url + movie.getPoster_path())
-                    .centerCrop().into(((TabMovieHolder) holder).imageView);
+                    .centerCrop().into(((TabMovieHolder) holder).imgView);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(context, DetailActivity.class);
-                    i.putExtra("movie", movie);
-                    v.getContext().startActivity(i);
+                    Navigation.startDetailActivity(context, movie.getId());
 
                 }
             });
@@ -76,11 +75,12 @@ public class TabMovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class TabMovieHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+        @BindView(R.id.img_view)
+        ImageView imgView;
 
         public TabMovieHolder(View itemView) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.img_view);
+            ButterKnife.bind(this, itemView);
         }
     }
 

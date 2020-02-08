@@ -3,50 +3,50 @@ package com.example.movies.ui.trending.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.movies.R;
-import com.example.movies.data.entity.TabPersonEntity;
-import com.example.movies.data.service.API;
+import com.example.movies.core.base.BaseFragment;
 import com.example.movies.data.entity.Person;
+import com.example.movies.data.entity.Result;
+import com.example.movies.data.entity.TabPersonEntity;
 import com.example.movies.data.service.RetroFitService;
 import com.example.movies.ui.trending.adapter.TabPersonAdapter;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import butterknife.BindView;
+import butterknife.Unbinder;
 
 
-public class TabPersonFragment extends Fragment {
+public class TabPersonFragment extends BaseFragment {
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    Unbinder unbinder;
     private TabPersonAdapter adapter;
     private ArrayList<Person> people = new ArrayList<>();
-    private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
     private boolean isLoadingShowed = false;
     private int pagination = 1;
     private int sizeOfPage = 0;
-    @Nullable
+    RetroFitService service = new RetroFitService();
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return  inflater.inflate(R.layout.fragment_layout, container,false);
+    public Integer getFragmentLayoutId() {
+        return R.layout.fragment_layout;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.recycler_view);
+
         setRecyclerView();
         initScrollListener();
         fetchPerson();
     }
+
     private void initScrollListener() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -74,28 +74,23 @@ public class TabPersonFragment extends Fragment {
         fetchPerson();
     }
 
-    private void fetchPerson(){
-        API retrofit = RetroFitService.getRetrofit().create(API.class);
-        Call<TabPersonEntity> call = retrofit.getTrendPerson("788a71cfbb2953df3cc3b1e7531ef259");
-        call.enqueue(new Callback<TabPersonEntity>() {
+    private void fetchPerson() {
+        RetroFitService.ResultCallBack serviceCallBack = new RetroFitService.ResultCallBack() {
             @Override
-            public void onResponse(@NonNull Call<TabPersonEntity> call, @NonNull Response<TabPersonEntity> response) {
-                if (response.body() != null
-                        || (response.body() != null ? response.body().getResults() : null) != null
-                        && (pagination == 1 || sizeOfPage == response.body().getResults().size())) {
-                    setData(response.body().getResults());
-                }else {
+            public void getResult(Result result) {
+                Result<TabPersonEntity> tabPersonEntityResult = result;
+                if (tabPersonEntityResult.getData() != null ||
+                        (tabPersonEntityResult.getData() != null ? tabPersonEntityResult.getData().getResults() : null) != null
+                                && (pagination == 1 || sizeOfPage == tabPersonEntityResult.getData().getResults().size())) {
+                    setData(tabPersonEntityResult.getData().getResults());
+                } else {
                     setLoadingCase();
-                    Toast.makeText(getActivity(), "End of the list", Toast.LENGTH_LONG).show();
                 }
             }
-
-            @Override
-            public void onFailure(@NonNull Call<TabPersonEntity> call, @NonNull Throwable t) {
-                System.out.println("hataaaaaaaaaaaa");
-            }
-        });
+        };
+        service.fetchPerson(serviceCallBack);
     }
+
     private void setRecyclerView() {
         layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(layoutManager);
@@ -103,22 +98,23 @@ public class TabPersonFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void setLoadingCase(){
-        if (isLoadingShowed){
+    private void setLoadingCase() {
+        if (isLoadingShowed) {
             people.remove(people.size() - 1);
             adapter.notifyDataSetChanged();
             isLoadingShowed = false;
         }
     }
 
-    private void addItemsToList(ArrayList<Person> list){
+    private void addItemsToList(ArrayList<Person> list) {
         sizeOfPage = list.size();
         people.addAll(list);
         adapter.notifyDataSetChanged();
     }
 
-    private void setData(ArrayList<Person> list){
+    private void setData(ArrayList<Person> list) {
         setLoadingCase();
         addItemsToList(list);
     }
+
 }

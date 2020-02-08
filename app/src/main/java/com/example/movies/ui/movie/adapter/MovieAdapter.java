@@ -1,7 +1,6 @@
 package com.example.movies.ui.movie.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,15 +11,19 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.navigation.Navigation;
 import com.example.movies.data.entity.Movie;
-import com.example.movies.ui.detail.DetailActivity;
 
 import java.util.ArrayList;
 
-public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+
 
     private Context context;
     private ArrayList<Movie> list;
@@ -50,14 +53,12 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Glide.with(context)
                     .load(url + movie.getPoster_path())
                     .centerCrop()
-                    .into(((MovieViewHolder) holder).imageViewMovie);
+                    .into(((MovieViewHolder) holder).imgView);
 
             ((MovieViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(context, DetailActivity.class);
-                    i.putExtra("id", movie.getId());
-                    view.getContext().startActivity(i);
+                    Navigation.startDetailActivity(context, movie.getId());
                 }
             });
         } else if (holder instanceof LoadingViewHolder) {
@@ -77,11 +78,12 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewMovie;
+        @BindView(R.id.img_view)
+        ImageView imgView;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
-            imageViewMovie = itemView.findViewById(R.id.img_view);
+            ButterKnife.bind(this, itemView);
         }
     }
 

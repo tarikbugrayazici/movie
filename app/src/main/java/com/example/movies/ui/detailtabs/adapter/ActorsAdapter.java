@@ -1,7 +1,6 @@
 package com.example.movies.ui.detailtabs.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,14 +11,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.movies.ui.actorsDetail.ActorsDetailActivity;
 import com.example.movies.R;
+import com.example.movies.core.navigation.Navigation;
 import com.example.movies.data.entity.Cast;
-
+import com.example.movies.data.enums.GenderImage;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ActorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private Context context;
     private ArrayList<Cast> list;
 
@@ -48,35 +52,33 @@ public class ActorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (holder instanceof ActorsViewHolder) {
 
             final Cast cast = list.get(position);
+
             String url = "https://image.tmdb.org/t/p/w500";
-            if (cast.getGender() == 1) {
+
+            if (cast.getProfile_path() != null) {
+                url += cast.getProfile_path();
+
                 Glide.with(context)
-                        .load(url + cast.getProfile_path())
-                        .placeholder(R.drawable.female)
-                        .into(((ActorsViewHolder) holder).imageView);
-                ((ActorsViewHolder) holder).textView.setText(cast.getName());
-                ((ActorsViewHolder) holder).textView2.setText(cast.getCharacter());
-            } else if (cast.getGender() == 2) {
-                Glide.with(context)
-                        .load(url + cast.getProfile_path())
-                        .placeholder(R.drawable.male)
-                        .into(((ActorsViewHolder) holder).imageView);
-                ((ActorsViewHolder) holder).textView.setText(cast.getName());
-                ((ActorsViewHolder) holder).textView2.setText(cast.getCharacter());
+                        .load(url)
+                        .centerCrop()
+                        .into(((ActorsViewHolder) holder).imgCast);
             } else {
-                Glide.with(context)
-                        .load(url + cast.getProfile_path())
-                        .placeholder(R.drawable.male)
-                        .into(((ActorsViewHolder) holder).imageView);
-                ((ActorsViewHolder) holder).textView.setText(cast.getName());
-                ((ActorsViewHolder) holder).textView2.setText(cast.getCharacter());
+                int profilePhoto = R.drawable.male;
+
+                if (cast.getGender() == GenderImage.FEMALE.getGenderImage()) {
+                    profilePhoto = R.drawable.female;
+                }
+
+                ((ActorsViewHolder) holder).imgCast.setImageResource(profilePhoto);
             }
+
+            ((ActorsViewHolder) holder).oyuncuTextName.setText(cast.getName());
+            ((ActorsViewHolder) holder).oyuncuTextMovieName.setText(cast.getCharacter());
+
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(context, ActorsDetailActivity.class);
-                    i.putExtra("actor",cast.getId());
-                    v.getContext().startActivity(i);
+                    Navigation.startActorsDetailActivity(context, cast.getId());
                 }
             });
 
@@ -100,16 +102,16 @@ public class ActorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public class ActorsViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView textView, textView2, textViewNumber;
+        @BindView(R.id.img_cast)
+        CircleImageView imgCast;
+        @BindView(R.id.oyuncu_text_name)
+        TextView oyuncuTextName;
+        @BindView(R.id.oyuncu_text_movie_name)
+        TextView oyuncuTextMovieName;
 
         public ActorsViewHolder(View itemView) {
             super(itemView);
-            textViewNumber = itemView.findViewById(R.id.number_of_actors);
-            imageView = itemView.findViewById(R.id.img_cast);
-            textView = itemView.findViewById(R.id.oyuncu_text_name);
-            textView2 = itemView.findViewById(R.id.oyuncu_text_movie_name);
-
+            ButterKnife.bind(this, itemView);
         }
     }
 

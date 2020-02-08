@@ -18,6 +18,9 @@ import com.example.movies.data.entity.Trailer;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder> {
     private Context context;
     private ArrayList<Trailer> list;
@@ -37,16 +40,16 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     public void onBindViewHolder(@NonNull InfoViewHolder holder, int position) {
         final Trailer trailer = list.get(position);
         String url = "https://img.youtube.com/vi/";
-        Glide.with(context).load(url+trailer.getKey()+"/hqdefault.jpg")
+        Glide.with(context).load(url + trailer.getKey() + "/hqdefault.jpg")
                 .placeholder(new ColorDrawable(context.getResources().getColor(R.color.colorBlack)))
-                .centerCrop().into(holder.imageView);
-        holder.textView.setText(trailer.getName());
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+                .centerCrop().into(holder.imgTrailer);
+        holder.trailer.setText(trailer.getName());
+        holder.imgTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://www.youtube.com/watch?v="+trailer.getKey()));
-                        v.getContext().startActivity(intent);
+                        Uri.parse("https://www.youtube.com/watch?v=" + trailer.getKey()));
+                v.getContext().startActivity(intent);
             }
         });
     }
@@ -57,12 +60,14 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     }
 
     public class InfoViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView textView;
+        @BindView(R.id.img_trailer)
+        ImageView imgTrailer;
+        @BindView(R.id.trailer)
+        TextView trailer;
+
         public InfoViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.img_trailer);
-            textView = itemView.findViewById(R.id.trailer);
+            ButterKnife.bind(this,itemView);
         }
     }
 }

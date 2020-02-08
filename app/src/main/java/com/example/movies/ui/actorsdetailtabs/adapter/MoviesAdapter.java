@@ -1,7 +1,6 @@
 package com.example.movies.ui.actorsdetailtabs.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,46 +11,59 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
 import com.example.movies.data.entity.CastDetail;
-import com.example.movies.data.entity.Movie;
-import com.example.movies.ui.actorsDetail.ActorsDetailActivity;
-import com.example.movies.ui.detail.DetailActivity;
 
 import java.util.ArrayList;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private ArrayList<CastDetail> list;
+    private int layout;
 
-    public MoviesAdapter(Context context, ArrayList<CastDetail> list) {
+    private static int GRID = 0;
+    private static int LINEAR = 1;
+
+    public MoviesAdapter(Context context, ArrayList<CastDetail> list, int layout) {
         this.context = context;
         this.list = list;
+        this.layout = layout;
 
     }
 
     @NonNull
     @Override
-    public MoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        return new MoviesViewHolder(LayoutInflater.from(context).inflate(R.layout.layout_item_cardview, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View view;
+        if (viewType == GRID) {
+            view = LayoutInflater.from(context).inflate(R.layout.layout_item_cardview, viewGroup, false);
+            return new GridLayoutViewHolder(view);
+        } else {
+            view = LayoutInflater.from(context).inflate(R.layout.layout_item_cardview_linear, viewGroup, false);
+            return new LinearLayoutViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MoviesViewHolder holder, int position) {
-        final CastDetail castDetail = list.get(position);
-        String url = "https://image.tmdb.org/t/p/w500";
-        Glide
-                .with(context)
-                .load(url + castDetail.getPoster_path())
-                .centerCrop()
-                .into(holder.imageView);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(context, DetailActivity.class);
-                i.putExtra("id", castDetail.getId());
-                v.getContext().startActivity(i);
-            }
-        });
-
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+        if (viewHolder instanceof GridLayoutViewHolder) {
+            final CastDetail castDetail = list.get(position);
+            String url = "https://image.tmdb.org/t/p/w500";
+            Glide
+                    .with(context)
+                    .load(url + castDetail.getPoster_path())
+                    .centerCrop()
+                    .into(((GridLayoutViewHolder) viewHolder).imgViewCardView);
+        } else if (viewHolder instanceof LinearLayoutViewHolder) {
+            final CastDetail castDetail = list.get(position);
+            String url = "https://image.tmdb.org/t/p/w500";
+            Glide
+                    .with(context)
+                    .load(url + castDetail.getPoster_path())
+                    .centerCrop()
+                    .into(((LinearLayoutViewHolder) viewHolder).imgViewCardViewLinear);
+        }
     }
 
     @Override
@@ -59,12 +71,29 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         return list.size();
     }
 
-    public class MoviesViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+    @Override
+    public int getItemViewType(int position) {
+        return this.layout;
+    }
 
-        public MoviesViewHolder(@NonNull View itemView) {
+    public class LinearLayoutViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.img_view_card_view_linear)
+        ImageView imgViewCardViewLinear;
+
+        public LinearLayoutViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.img_view_card_view);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public class GridLayoutViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.img_view_card_view)
+        ImageView imgViewCardView;
+
+        public GridLayoutViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

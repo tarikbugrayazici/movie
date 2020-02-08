@@ -1,7 +1,6 @@
 package com.example.movies.ui.detailtabs.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,15 +11,16 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.navigation.Navigation;
 import com.example.movies.data.entity.Movie;
-import com.example.movies.data.entity.RecommendedMovie;
-import com.example.movies.ui.detail.DetailActivity;
-import com.example.movies.ui.movie.adapter.MovieAdapter;
-
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private Context context;
     private ArrayList<Movie> list;
 
@@ -54,14 +54,12 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             Glide.with(context)
                     .load(url + recommendedMovie.getPoster_path())
                     .centerCrop()
-                    .into(((RecommendedViewHolder) holder).imageView);
+                    .into(((RecommendedViewHolder) holder).imgViewCardView);
 
             ((RecommendedViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(context, DetailActivity.class);
-                    i.putExtra("movie", recommendedMovie);
-                    view.getContext().startActivity(i);
+                    Navigation.startDetailActivity(context, recommendedMovie.getId());
                 }
             });
 
@@ -81,11 +79,12 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public class RecommendedViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+        @BindView(R.id.img_view_card_view)
+        ImageView imgViewCardView;
 
         public RecommendedViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.img_view_card_view);
+            ButterKnife.bind(this,itemView);
         }
     }
 

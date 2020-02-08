@@ -1,7 +1,6 @@
 package com.example.movies.ui.detailtabs.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,13 +11,16 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.navigation.Navigation;
 import com.example.movies.data.entity.Movie;
-import com.example.movies.data.entity.SimilarMovie;
-import com.example.movies.ui.detail.DetailActivity;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SimilarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private Context context;
     private ArrayList<Movie> list;
 
@@ -49,19 +51,15 @@ public class SimilarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             String url = "https://image.tmdb.org/t/p/w500";
             Glide.with(context)
                     .load(url + similarMovie.getPoster_path())
-                    .into(((SimilarViewHolder) holder).imageView);
+                    .into(((SimilarViewHolder) holder).imgViewCardView);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(context, DetailActivity.class);
-                    i.putExtra("movie", similarMovie);
-                    v.getContext().startActivity(i);
-
+                    Navigation.startDetailActivity(context, similarMovie.getId());
                 }
             });
-        }
-        else if (holder instanceof LoadingViewHolder) {
+        } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, position);
         }
     }
@@ -77,11 +75,12 @@ public class SimilarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class SimilarViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+        @BindView(R.id.img_view_card_view)
+        ImageView imgViewCardView;
 
         public SimilarViewHolder(View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.img_view_card_view);
+            ButterKnife.bind(this,itemView);
         }
     }
 

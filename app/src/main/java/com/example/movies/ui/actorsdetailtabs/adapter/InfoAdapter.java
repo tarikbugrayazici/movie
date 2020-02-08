@@ -1,25 +1,24 @@
 package com.example.movies.ui.actorsdetailtabs.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
-import com.example.movies.data.entity.ActorsEntity;
 import com.example.movies.data.entity.ActorsPhotos;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder> {
+
     private Context context;
     private ArrayList<ActorsPhotos> list;
 
@@ -43,7 +42,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
                 .with(context)
                 .load(url + actorsPhotos.getFile_path())
                 .centerCrop()
-                .into(holder.imageView);
+                .into(holder.photo);
     }
 
 
@@ -53,11 +52,12 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     }
 
     public class InfoViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+        @BindView(R.id.photo)
+        ImageView photo;
 
         public InfoViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.photo);
+            ButterKnife.bind(this,itemView);
         }
     }
 }

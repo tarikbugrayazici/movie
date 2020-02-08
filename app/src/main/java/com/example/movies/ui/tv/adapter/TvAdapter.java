@@ -1,7 +1,6 @@
 package com.example.movies.ui.tv.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,15 +11,18 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.navigation.Navigation;
 import com.example.movies.data.entity.Movie;
-import com.example.movies.data.entity.Tv;
-import com.example.movies.ui.detail.DetailActivity;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class TvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+
 
     private Context context;
     private ArrayList<Movie> list;
@@ -35,8 +37,7 @@ public class TvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item, parent, false);
             return new TvViewHolder(view);
-        }
-        else {
+        } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_bar, parent, false);
             return new LoadingViewHolder(view);
         }
@@ -49,18 +50,15 @@ public class TvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             final Movie movie = list.get(position);
             String url = "https://image.tmdb.org/t/p/w500";
             Glide.with(context).load(url + movie.getPoster_path())
-                    .centerCrop().into(((TvViewHolder) holder).imageViewMovie);
+                    .centerCrop().into(((TvViewHolder) holder).imgView);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(context, DetailActivity.class);
-                    i.putExtra("movie",movie);
-                    v.getContext().startActivity(i);
+                    Navigation.startDetailActivity(context, movie.getId());
 
                 }
             });
-        }
-        else if (holder instanceof LoadingViewHolder) {
+        } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, position);
         }
     }
@@ -76,21 +74,24 @@ public class TvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class TvViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewMovie;
+        @BindView(R.id.img_view)
+        ImageView imgView;
 
         public TvViewHolder(View itemView) {
             super(itemView);
-            imageViewMovie = (ImageView) itemView.findViewById(R.id.img_view);
+            ButterKnife.bind(this, itemView);
         }
     }
 
     public class LoadingViewHolder extends RecyclerView.ViewHolder {
         ProgressBar progressBar;
+
         public LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
-            progressBar = (ProgressBar)itemView.findViewById(R.id.progress);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progress);
         }
     }
+
     private void showLoadingView(LoadingViewHolder viewHolder, int position) {
         //ProgressBar would be displayed
 

@@ -12,23 +12,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-import com.example.movies.ui.detailtabs.adapter.CrewsDialogAdapter;
 import com.example.movies.R;
 import com.example.movies.data.entity.Crew;
+import com.example.movies.ui.detailtabs.adapter.CrewsDialogAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 public class CrewsDialogFragment extends DialogFragment implements com.example.movies.ui.detailtabs.view.Dialog.DialogListener {
 
+    @BindView(R.id.number_of_actors)
+    TextView numberOfActors;
+    @BindView(R.id.sort)
+    TextView sort;
+    @BindView(R.id.recycler_view_person)
+    RecyclerView recyclerViewPerson;
+    Unbinder unbinder;
     private ArrayList<Crew> crews = new ArrayList<>();
-    private RecyclerView recyclerView;
     private CrewsDialogAdapter adapter;
     private LinearLayoutManager layout;
-    private TextView textView, textViewSort;
 
     @Override
     public void onStart() {
@@ -44,7 +52,9 @@ public class CrewsDialogFragment extends DialogFragment implements com.example.m
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.actors, container, false);
+        View view = inflater.inflate(R.layout.actors, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -72,11 +82,9 @@ public class CrewsDialogFragment extends DialogFragment implements com.example.m
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.recycler_view_person);
-        textView = view.findViewById(R.id.number_of_actors);
-        textView.setText(crews.size() + " kişi");
-        textViewSort = view.findViewById(R.id.sort);
-        textViewSort.setOnClickListener(new View.OnClickListener() {
+        numberOfActors.setText(crews.size() + " kişi");
+        sort = view.findViewById(R.id.sort);
+        sort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openDialog();
@@ -96,9 +104,9 @@ public class CrewsDialogFragment extends DialogFragment implements com.example.m
 
     private void setRecyclerView() {
         layout = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layout);
+        recyclerViewPerson.setLayoutManager(layout);
         adapter = new CrewsDialogAdapter(getContext(), crews);
-        recyclerView.setAdapter(adapter);
+        recyclerViewPerson.setAdapter(adapter);
     }
 
     public static CrewsDialogFragment newInstance(ArrayList<Crew> crew) {
@@ -114,6 +122,4 @@ public class CrewsDialogFragment extends DialogFragment implements com.example.m
         this.crews = crew;
 
     }
-
-
 }

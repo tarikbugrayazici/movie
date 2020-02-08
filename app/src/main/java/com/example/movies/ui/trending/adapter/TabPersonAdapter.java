@@ -9,16 +9,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.navigation.Navigation;
 import com.example.movies.data.entity.Person;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TabPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+
 
     private Context context;
     private ArrayList<Person> list;
@@ -34,8 +38,7 @@ public class TabPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item, parent, false);
             return new PersonViewHolder(view);
-        }
-        else {
+        } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_bar, parent, false);
             return new LoadingViewHolder(view);
         }
@@ -48,11 +51,17 @@ public class TabPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             final Person person = list.get(position);
             String url = "https://image.tmdb.org/t/p/w500";
             Glide.with(context).load(url + person.getProfile_path())
-                    .centerCrop().into(((PersonViewHolder) holder).imageView);
-        }
-        else if (holder instanceof LoadingViewHolder) {
+                    .centerCrop().into(((PersonViewHolder) holder).imgView);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.startActorsDetailActivity(context, person.getId());
+                }
+            });
+        } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, position);
         }
+
 
     }
 
@@ -67,21 +76,24 @@ public class TabPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public class PersonViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
+        @BindView(R.id.img_view)
+        ImageView imgView;
 
         public PersonViewHolder(View itemView) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.img_view);
+            ButterKnife.bind(this, itemView);
         }
     }
 
     public class LoadingViewHolder extends RecyclerView.ViewHolder {
         ProgressBar progressBar;
+
         public LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
-            progressBar = (ProgressBar)itemView.findViewById(R.id.progress);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progress);
         }
     }
+
     private void showLoadingView(LoadingViewHolder viewHolder, int position) {
         //ProgressBar would be displayed
 

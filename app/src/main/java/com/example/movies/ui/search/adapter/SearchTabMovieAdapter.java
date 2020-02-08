@@ -9,15 +9,20 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
-import com.example.movies.data.entity.SearchMovie;
+import com.example.movies.core.navigation.Navigation;
+import com.example.movies.data.entity.Movie;
 
 import java.util.ArrayList;
 
-public class SearchTabMovieAdapter extends RecyclerView.Adapter<SearchTabMovieAdapter.SearchTabMovieAdapterHolder>  {
-    private Context context;
-    private ArrayList<SearchMovie> list;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    public SearchTabMovieAdapter(Context context, ArrayList<SearchMovie> list) {
+public class SearchTabMovieAdapter extends RecyclerView.Adapter<SearchTabMovieAdapter.SearchTabMovieAdapterHolder> {
+
+    private Context context;
+    private ArrayList<Movie> list;
+
+    public SearchTabMovieAdapter(Context context, ArrayList<Movie> list) {
         this.context = context;
         this.list = list;
     }
@@ -30,10 +35,18 @@ public class SearchTabMovieAdapter extends RecyclerView.Adapter<SearchTabMovieAd
 
     @Override
     public void onBindViewHolder(SearchTabMovieAdapterHolder holder, int position) {
-        final SearchMovie searchMovie = list.get(position);
+        final Movie movie = list.get(position);
         String url = "https://image.tmdb.org/t/p/w500";
-        Glide.with(context).load(url+searchMovie.getPoster_path())
-                .centerCrop().into(holder.searchTabMovie);
+        Glide.with(context).load(url + movie.getPoster_path())
+                .centerCrop().into(holder.imgView);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.startDetailActivity(context, movie.getId());
+
+            }
+        });
+
     }
 
     @Override
@@ -42,11 +55,12 @@ public class SearchTabMovieAdapter extends RecyclerView.Adapter<SearchTabMovieAd
     }
 
     public class SearchTabMovieAdapterHolder extends RecyclerView.ViewHolder {
-        ImageView searchTabMovie;
+        @BindView(R.id.img_view)
+        ImageView imgView;
+
         public SearchTabMovieAdapterHolder(View itemView) {
             super(itemView);
-            searchTabMovie = (ImageView) itemView.findViewById(R.id.img_view);
-
+            ButterKnife.bind(this, itemView);
         }
     }
 }

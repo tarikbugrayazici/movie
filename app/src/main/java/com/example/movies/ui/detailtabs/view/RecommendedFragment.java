@@ -9,37 +9,35 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.movies.R;
+import com.example.movies.core.base.BaseFragment;
 import com.example.movies.data.entity.BaseEntity;
 import com.example.movies.data.entity.Movie;
-import com.example.movies.data.entity.Recommended;
-import com.example.movies.data.entity.RecommendedMovie;
-import com.example.movies.data.service.API;
+import com.example.movies.data.entity.Result;
 import com.example.movies.data.service.RetroFitService;
 import com.example.movies.ui.detailtabs.adapter.RecommendedAdapter;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import butterknife.BindView;
 
-public class RecommendedFragment extends Fragment {
+
+public class RecommendedFragment extends BaseFragment {
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
     private RecommendedAdapter adapter;
-    private RecyclerView recyclerView;
     private GridLayoutManager layoutManager;
     private ArrayList<Movie> movies = new ArrayList<>();
     private boolean isLoadingShowed = false;
     private int pagination = 1;
     private int sizeOfPage = 0;
     private int id;
+    RetroFitService service = new RetroFitService();
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_layout, container, false);
+    public Integer getFragmentLayoutId() {
+        return R.layout.fragment_layout;
     }
 
     @Override
@@ -82,29 +80,21 @@ public class RecommendedFragment extends Fragment {
     }
 
     private void fetchRecommendedMovie(int id) {
-        API retrofit = RetroFitService.getRetrofit().create(API.class);
-        Call<BaseEntity> call = retrofit.getRecommendedMovies(id,
-                "788a71cfbb2953df3cc3b1e7531ef259", "en-US", pagination);
-        call.enqueue(new Callback<BaseEntity>() {
+        RetroFitService.ResultCallBack serviceCallBack = new RetroFitService.ResultCallBack() {
             @Override
-            public void onResponse(Call<BaseEntity> call, Response<BaseEntity> response) {
-                setData(response.body().getResults());
-                if (response.body() != null
-                        || (response.body() != null ? response.body().getResults() : null) != null
-                        && (pagination == 1 || sizeOfPage == response.body().getResults().size())) {
-                    setData(response.body().getResults());
+            public void getResult(Result result) {
+                Result<BaseEntity> baseEntityResult = result;
+                if (baseEntityResult.getData() != null ||
+                        (baseEntityResult.getData() != null ? baseEntityResult.getData().getResults() : null) != null
+                                && (pagination == 1 || sizeOfPage == baseEntityResult.getData().getResults().size())) {
+                    setData(baseEntityResult.getData().getResults());
                 } else {
                     setLoadingCase();
-                    Toast.makeText(getActivity(), "End of the list", Toast.LENGTH_LONG).show();
                 }
-
             }
+        };
 
-            @Override
-            public void onFailure(Call<BaseEntity> call, Throwable t) {
-                System.out.println("hataAaAa" + t);
-            }
-        });
+        service.fetchRecommendedMovie(id, serviceCallBack, pagination);
     }
 
     private void setLoadingCase() {
@@ -141,5 +131,4 @@ public class RecommendedFragment extends Fragment {
         fragment.setArguments(bundle);
         return fragment;
     }
-
 }

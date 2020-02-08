@@ -1,7 +1,6 @@
 package com.example.movies.ui.search.view;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,41 +12,43 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-
+import android.widget.Toast;
 
 import com.example.movies.R;
-import com.example.movies.data.service.API;
+import com.example.movies.data.entity.BaseEntity;
+import com.example.movies.data.entity.Movie;
+import com.example.movies.data.entity.Result;
 import com.example.movies.data.service.RetroFitService;
-import com.example.movies.data.entity.SearchTv;
-import com.example.movies.data.entity.SearchTvBaseEntity;
 import com.example.movies.ui.search.adapter.SearchTabTvAdapter;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class SearchTabTvFragment extends Fragment {
-    RecyclerView recyclerView;
-    EditText editText;
-    String text;
-    Button button;
+    RetroFitService service = new RetroFitService();
+    @BindView(R.id.edit_tv)
+    EditText editTv;
+    @BindView(R.id.search_tv_recycler_view)
+    RecyclerView searchTvRecyclerView;
+    Unbinder unbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search_tab_tv, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_tab_tv, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) view.findViewById(R.id.search_tv_recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        editText = (EditText) view.findViewById(R.id.edit_tv);
-        editText.addTextChangedListener(new TextWatcher() {
+        searchTvRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        editTv.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -66,32 +67,33 @@ public class SearchTabTvFragment extends Fragment {
                 }
             }
         });
-
     }
 
     private void fetchTvNames(String text) {
-        API retrofit = RetroFitService.getRetrofit().create(API.class);
-        Call<SearchTvBaseEntity> call = retrofit.getSearchTv("788a71cfbb2953df3cc3b1e7531ef259",
-                "en-US", text, 1);
-        call.enqueue(new Callback<SearchTvBaseEntity>() {
+        RetroFitService.ResultCallBack serviceCallBack = new RetroFitService.ResultCallBack() {
             @Override
-            public void onResponse(@NonNull Call<SearchTvBaseEntity> call, @NonNull Response<SearchTvBaseEntity> response) {
-                response.body().getResults();
-                setRecyclerView(response.body().getResults());
+            public void getResult(Result result) {
+                Result<BaseEntity> baseEntityResult = result;
+                if (baseEntityResult.getData() != null) {
+                    setRecyclerView(baseEntityResult.getData().getResults());
+                } else {
+                    Toast.makeText(getActivity(), baseEntityResult.getErrorMessage(), Toast.LENGTH_LONG).show();
+                }
             }
-
-            @Override
-            public void onFailure(@NonNull Call<SearchTvBaseEntity> call, @NonNull Throwable t) {
-
-            }
-        });
+        };
+        service.fetchTvNames(serviceCallBack, text);
     }
 
-    private void setRecyclerView(ArrayList<SearchTv> list) {
-        ArrayList<SearchTv> searchTvs = new ArrayList<>();
+    private void setRecyclerView(ArrayList<Movie> list) {
+        ArrayList<Movie> searchTvs = new ArrayList<>();
         searchTvs.addAll(list);
         SearchTabTvAdapter adapter = new SearchTabTvAdapter(getContext(), searchTvs);
-        recyclerView.setAdapter(adapter);
+        searchTvRecyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

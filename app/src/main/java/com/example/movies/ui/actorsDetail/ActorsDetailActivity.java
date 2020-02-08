@@ -7,42 +7,120 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.movies.R;
-import com.example.movies.data.service.API;
+import com.example.movies.core.base.BaseActivity;
+import com.example.movies.core.helper.ImageHelper;
+import com.example.movies.data.entity.ActorsResult;
+import com.example.movies.data.entity.ActorsTaggedImages;
+import com.example.movies.data.entity.Media;
+import com.example.movies.data.entity.PersonP;
+import com.example.movies.data.entity.Result;
 import com.example.movies.data.service.RetroFitService;
 
-import retrofit2.Call;
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import me.relex.circleindicator.CircleIndicator;
 
 
-public class ActorsDetailActivity extends AppCompatActivity {
-    private TabLayout tabLayout;
-    private ViewPager viewPagerTab, viewPager;
-    private ImageView imageView;
+public class ActorsDetailActivity extends BaseActivity {
+    @BindView(R.id.circular_image_actor)
+    ImageView imageView;
+    @BindView(R.id.view_pager_actor_tab)
+    ViewPager viewPagerTab;
+    @BindView(R.id.view_pager_actor)
+    ViewPager viewPagerActor;
+    @BindView(R.id.tab_layout_actors)
+    TabLayout tabLayout;
+    @BindView(R.id.circular_indicator)
+    CircleIndicator circleIndicator;
     private int id;
+    private ArrayList<Media> media = new ArrayList<>();
+    private ArrayList<ActorsResult> actorsResults = new ArrayList<>();
+    //   private Cast cast;
+    private ArrayList<PersonP> person = new ArrayList<>();
+    RetroFitService service = new RetroFitService();
+
+    @Override
+    public Integer getLayoutId() {
+        return R.layout.activity_detail_actors;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_actors);
         Intent i = getIntent();
         id = i.getIntExtra("actor", 0);
+        //  cast = i.getParcelableExtra("cast");
 
 
-        viewPagerTab = findViewById(R.id.view_pager_actors);
-        tabLayout = findViewById(R.id.tab_layout_actors);
         ActorsDetailTabAdapter actorsDetailTabAdapter = new ActorsDetailTabAdapter(getSupportFragmentManager(), this, id);
         viewPagerTab.setAdapter(actorsDetailTabAdapter);
         tabLayout.setupWithViewPager(viewPagerTab);
 
-        imageView = findViewById(R.id.circular_image_actor);
+
         fetchActorsDetail(id);
+        fetchActorsPictures();
 
     }
-    private void fetchActorsDetail(int id){
-        API retrofit = RetroFitService.getRetrofit().create(API.class);
+
+    private void fetchActorsPictures() {
+        RetroFitService.ResultCallBack serviceCallBack = new RetroFitService.ResultCallBack() {
+            @Override
+            public void getResult(Result result) {
+                Result<PersonP> personPResult = result;
+                if (personPResult.getData() != null) {
+                    setProfilePicture(personPResult.getData());
+                } else {
+                    Toast.makeText(ActorsDetailActivity.this, result.getErrorMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+        service.fetchActorsPictures(id, serviceCallBack);
+    }
+
+    private void fetchActorsDetail(int id) {
+        RetroFitService.ResultCallBack serviceCallBack = new RetroFitService.ResultCallBack() {
+            @Override
+            public void getResult(Result result) {
+                Result<ActorsTaggedImages> actorsTaggedImagesResult = result;
+                if (actorsTaggedImagesResult.getData() != null) {
+                    setData(actorsTaggedImagesResult.getData().getResults());
+                } else {
+                    Toast.makeText(ActorsDetailActivity.this, result.getErrorMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+        service.fetchActorsDetail(id, serviceCallBack);
+    }
+
+    private void setProfilePicture(PersonP list) {
+        person.add(list);
+        Glide.with(this)
+                .load(ImageHelper.getImageUrl(list.getProfile_path()))
+                .centerCrop()
+                .into(imageView);
     }
 
 
+    private void setData(ArrayList<ActorsResult> list) {
+        actorsResults.addAll(list);
+        setMedia(list);
+    }
 
+    private void setMedia(ArrayList<ActorsResult> list) {
+
+        for (ActorsResult s : list) {
+            media.add(s.getMedia());
+            PagerAdapterSlideActor pagerAdapterSlideActor = new
+                    PagerAdapterSlideActor(this, media);
+            viewPagerActor.setAdapter(pagerAdapterSlideActor);
+            circleIndicator.setViewPager(viewPagerActor);
+
+        }
+    }
 }

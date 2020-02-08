@@ -7,28 +7,25 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.base.BaseFragment;
 import com.example.movies.data.entity.Crew;
 import com.example.movies.data.entity.DetailInfo;
 import com.example.movies.data.entity.Genres;
 import com.example.movies.data.entity.MovieCrew;
 import com.example.movies.data.entity.ProductionCompanies;
 import com.example.movies.data.entity.ProductionCountries;
+import com.example.movies.data.entity.Result;
 import com.example.movies.data.entity.Trailer;
 import com.example.movies.data.entity.Trailers;
-import com.example.movies.data.service.API;
 import com.example.movies.data.service.RetroFitService;
 import com.example.movies.ui.detailtabs.adapter.InfoAdapter;
 
@@ -39,15 +36,62 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import butterknife.BindView;
+import butterknife.Unbinder;
 
-public class InfoFragment extends Fragment {
+public class InfoFragment extends BaseFragment {
+    @BindView(R.id.text_genres)
+    TextView textGenres;
+    @BindView(R.id.text_rating)
+    TextView textRating;
+    @BindView(R.id.text_overview)
+    TextView textOverview;
+    @BindView(R.id.show_all)
+    TextView showAll;
+    @BindView(R.id.crew_one)
+    TextView crewOne;
+    @BindView(R.id.crew_two)
+    TextView crewTwo;
+    @BindView(R.id.crew_ones_two)
+    TextView crewOnesTwo;
+    @BindView(R.id.crew_twos_two)
+    TextView crewTwosTwo;
+    @BindView(R.id.crew_three)
+    TextView crewThree;
+    @BindView(R.id.crew_four)
+    TextView crewFour;
+    @BindView(R.id.crew_threes_three)
+    TextView crewThreesThree;
+    @BindView(R.id.crew_fours_four)
+    TextView crewFoursFour;
+    @BindView(R.id.info_recycler_view)
+    RecyclerView infoRecyclerView;
+    @BindView(R.id.original_name)
+    TextView originalName;
+    @BindView(R.id.situtation)
+    TextView situtation;
+    @BindView(R.id.runtime)
+    TextView runtime;
+    @BindView(R.id.release_date1)
+    TextView releaseDate1;
+    @BindView(R.id.original_language)
+    TextView originalLanguage;
+    @BindView(R.id.production_countries)
+    TextView productionCountries;
+    @BindView(R.id.certificate)
+    TextView certificate;
+    @BindView(R.id.budget)
+    TextView budget;
+    @BindView(R.id.revenues)
+    TextView revenues;
+    @BindView(R.id.companies)
+    TextView companies;
+    @BindView(R.id.homepage)
+    TextView homepage;
+    Unbinder unbinder;
+
     private String DATE_FORMAT = "yyyy-MM-dd";
-    private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private InfoAdapter adapter;
     private ArrayList<Trailer> trailer;
@@ -56,21 +100,14 @@ public class InfoFragment extends Fragment {
     private ArrayList<DetailInfo> detailInfos;
     private ArrayList<Genres> genres;
     private ArrayList<ProductionCompanies> productionCompanies;
-    private ArrayList<ProductionCountries> productionCountries;
-    private TextView textOverview, textRating, textGenres, textCrewOne, textCrewOnes, textCrewTwo,
-            textCrewTwos, textCrewThree, textCrewThrees, textCrewFour, textCrewFours, textShowAll,
-            textOriginalName, textSitutation,
-            textReleaseDate, textProductionCountries, textBudget, textRuntime,
-            textOriginalLanguage, textCertificate, textRevenues, textCompanies, textHomepage;
+    private ArrayList<ProductionCountries> productionCountriess;
     private boolean isCharacterCountOfOverviewOverflowed = false;
+    RetroFitService service = new RetroFitService();
 
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.tab_bilgiler_item, container, false);
-
+    public Integer getFragmentLayoutId() {
+        return R.layout.tab_bilgiler_item;
     }
 
     @Override
@@ -82,87 +119,51 @@ public class InfoFragment extends Fragment {
             fetchCrews(id);
             fetchTrailers(id);
         }
-        recyclerView = view.findViewById(R.id.info_recycler_view);
-        textHomepage = view.findViewById(R.id.homepage);
-        textOriginalName = view.findViewById(R.id.original_name);
-        textSitutation = view.findViewById(R.id.situtation);
-        textReleaseDate = view.findViewById(R.id.release_date1);
-        textProductionCountries = view.findViewById(R.id.production_countries);
-        textBudget = view.findViewById(R.id.budget);
-        textRuntime = view.findViewById(R.id.runtime);
-        textOriginalLanguage = view.findViewById(R.id.original_language);
-        textCertificate = view.findViewById(R.id.certificate);
-        textRevenues = view.findViewById(R.id.revenues);
-        textCompanies = view.findViewById(R.id.companies);
-
-        textOverview = view.findViewById(R.id.text_overview);
-        textRating = view.findViewById(R.id.text_rating);
-        textGenres = view.findViewById(R.id.text_genres);
-
-        textCrewOne = view.findViewById(R.id.crew_one);
-        textCrewOnes = view.findViewById(R.id.crew_ones_two);
-        textCrewTwo = view.findViewById(R.id.crew_two);
-        textCrewTwos = view.findViewById(R.id.crew_twos_two);
-        textCrewThree = view.findViewById(R.id.crew_three);
-        textCrewThrees = view.findViewById(R.id.crew_threes_three);
-        textCrewFour = view.findViewById(R.id.crew_four);
-        textCrewFours = view.findViewById(R.id.crew_fours_four);
-
-        textShowAll = view.findViewById(R.id.show_all);
     }
 
     private void fetchTrailers(int id) {
-        API retrofit = RetroFitService.getRetrofit().create(API.class);
-        Call<Trailers> call = retrofit.getTrailers(id, "788a71cfbb2953df3cc3b1e7531ef259",
-                "en-US");
-        call.enqueue(new Callback<Trailers>() {
+        RetroFitService.ResultCallBack serviceCallBack = new RetroFitService.ResultCallBack() {
             @Override
-            public void onResponse(Call<Trailers> call, Response<Trailers> response) {
-                response.body().getResults();
-                setVideos(response.body().getResults());
+            public void getResult(Result result) {
+                Result<Trailers> trailersResult = result;
+                if (trailersResult.getData() != null) {
+                    setVideos(trailersResult.getData().getResults());
+                } else {
+                    Toast.makeText(getActivity(), trailersResult.getErrorMessage(), Toast.LENGTH_LONG).show();
+                }
             }
-
-            @Override
-            public void onFailure(Call<Trailers> call, Throwable t) {
-
-            }
-        });
+        };
+        service.fetchTrailers(id, serviceCallBack);
     }
 
     private void fetchInfo(int id) { //419704
-        API retrofit = RetroFitService.getRetrofit().create(API.class);
-        Call<DetailInfo> call = retrofit.getMovieDetail(id, "788a71cfbb2953df3cc3b1e7531ef259",
-                "en-US");
-        call.enqueue(new Callback<DetailInfo>() {
+        RetroFitService.ResultCallBack serviceCallBack = new RetroFitService.ResultCallBack() {
             @Override
-            public void onResponse(Call<DetailInfo> call, Response<DetailInfo> response) {
-                response.body();
-                setData(response.body());
+            public void getResult(Result result) {
+                Result<DetailInfo> detailInfoResult = result;
+                if (detailInfoResult.getData() != null) {
+                    setData(detailInfoResult.getData());
+                } else {
+                    Toast.makeText(getActivity(), detailInfoResult.getErrorMessage(), Toast.LENGTH_LONG).show();
+                }
             }
-
-            @Override
-            public void onFailure(Call<DetailInfo> call, Throwable t) {
-                System.out.println("hata" + t);
-
-            }
-        });
+        };
+        service.fetchInfo(id, serviceCallBack);
     }
 
     private void fetchCrews(int id) {
-        API retrofit = RetroFitService.getRetrofit().create(API.class);
-        Call<MovieCrew> call = retrofit.getMovieCrew(id, "788a71cfbb2953df3cc3b1e7531ef259");
-        call.enqueue(new Callback<MovieCrew>() {
+        RetroFitService.ResultCallBack serviceCallBack = new RetroFitService.ResultCallBack() {
             @Override
-            public void onResponse(Call<MovieCrew> call, Response<MovieCrew> response) {
-                setDataCrews(response.body());
+            public void getResult(Result result) {
+                Result<MovieCrew> movieCrewResult = result;
+                if (movieCrewResult.getData() != null) {
+                    setDataCrews(movieCrewResult.getData());
+                } else {
+                    Toast.makeText(getActivity(), movieCrewResult.getErrorMessage(), Toast.LENGTH_LONG).show();
+                }
             }
-
-            @Override
-            public void onFailure(Call<MovieCrew> call, Throwable t) {
-                System.out.println("hata ne iimiş" + t);
-
-            }
-        });
+        };
+        service.fetchCrews(id, serviceCallBack);
 
     }
 
@@ -170,15 +171,13 @@ public class InfoFragment extends Fragment {
         trailer = new ArrayList<>();
         trailer.addAll(list);
         setRecyclerView();
-
-
     }
 
     private void setRecyclerView() {
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        infoRecyclerView.setLayoutManager(layoutManager);
         adapter = new InfoAdapter(getContext(), trailer);
-        recyclerView.setAdapter(adapter);
+        infoRecyclerView.setAdapter(adapter);
     }
 
     private void setDataCrews(MovieCrew list) {
@@ -202,16 +201,27 @@ public class InfoFragment extends Fragment {
             crew = liste.split(",");
             crew2 = liste2.split(",");
         }
-        textCrewOne.setText(crew[0]);
-        textCrewOnes.setText(crew2[0]);
-        textCrewTwo.setText(crew[1]);
-        textCrewTwos.setText(crew2[1]);
-        textCrewThree.setText(crew[2]);
-        textCrewThrees.setText(crew2[2]);
-        textCrewFour.setText(crew[3]);
-        textCrewFours.setText(crew2[3]);
+        if (crews.size() > 3) {
+            crewOne.setText(crew[0]);
+            crewOnesTwo.setText(crew2[0]);
+            crewTwo.setText(crew[1]);
+            crewTwosTwo.setText(crew2[1]);
+            crewThree.setText(crew[2]);
+            crewThreesThree.setText(crew2[2]);
+            crewFour.setText(crew[3]);
+            crewFoursFour.setText(crew2[3]);
+        } else {
+            crewOne.setText("empty");
+            crewOnesTwo.setText("empty");
+            crewTwo.setText("empty");
+            crewTwosTwo.setText("empty");
+            crewThree.setText("empty");
+            crewThreesThree.setText("empty");
+            crewFour.setText("empty");
+            crewFoursFour.setText("empty");
+        }
 
-        textShowAll.setOnClickListener(new View.OnClickListener() {
+        showAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -226,7 +236,6 @@ public class InfoFragment extends Fragment {
                 newFragment.show(ft, "crews");
             }
         });
-
     }
 
     private void setData(DetailInfo list) {
@@ -238,54 +247,55 @@ public class InfoFragment extends Fragment {
         setGenres(list.getGenres());
     }
 
-    private void setTag(final DetailInfo list, ArrayList<ProductionCompanies> productionCompaniesArrayList,
+    private void setTag(final DetailInfo list, ArrayList<
+            ProductionCompanies> productionCompaniesArrayList,
                         ArrayList<ProductionCountries> productionCountriesArrayList) {
         productionCompanies = new ArrayList<>();
         productionCompanies.addAll(productionCompaniesArrayList);
-        productionCountries = new ArrayList<>();
-        productionCountries.addAll(productionCountriesArrayList);
-        textOriginalName.setText(list.getOriginal_title());
+        productionCountriess = new ArrayList<>();
+        productionCountriess.addAll(productionCountriesArrayList);
+        originalName.setText(list.getOriginal_title());
         String date = list.getRelease_date();
         SimpleDateFormat spf = new SimpleDateFormat(DATE_FORMAT);
         try {
             Date newDate = spf.parse(date);
             spf = new SimpleDateFormat("dd MMM yyyy");
             date = spf.format(newDate);
-            textReleaseDate.setText(date);
+            releaseDate1.setText(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
 
-        textSitutation.setText(list.getStatus());
-        String companies = " ";
+        situtation.setText(list.getStatus());
+        String companiess = " ";
         for (ProductionCompanies s : productionCompanies) {
             String.valueOf(s);
-            companies += s.getName() + ",";
+            companiess += s.getName() + ",";
         }
-        textCompanies.setText(companies);
+        companies.setText(companiess);
         NumberFormat formatter = new DecimalFormat("#,###");
         double myNumber = list.getBudget();
         String formattedNumber = formatter.format(myNumber);
-        textBudget.setText("$" + String.valueOf(formattedNumber));
-        textRuntime.setText(String.valueOf(list.getRuntime() + " dk"));
+        budget.setText("$" + String.valueOf(formattedNumber));
+        runtime.setText(String.valueOf(list.getRuntime() + " dk"));
 
         String lng = list.getOriginal_language();
         Locale loc = new Locale(lng);
         String name = loc.getDisplayLanguage(loc);
-        textOriginalLanguage.setText(name);
+        originalLanguage.setText(name);
         // textCertificate.setText(list.get);
         double mynumber2 = list.getRevenue();
         String number = formatter.format(mynumber2);
-        textRevenues.setText(String.valueOf("$" + number));
+        revenues.setText(String.valueOf("$" + number));
         String countries = " ";
-        for (ProductionCountries s : productionCountries) {
+        for (ProductionCountries s : productionCountriess) {
             countries += s.getName() + ",";
         }
-        textProductionCountries.setText(countries);
+        productionCountries.setText(countries);
 
-        textHomepage.setText(list.getHomepage());
-        textHomepage.setOnClickListener(new View.OnClickListener() {
+        homepage.setText(list.getHomepage());
+        homepage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW,

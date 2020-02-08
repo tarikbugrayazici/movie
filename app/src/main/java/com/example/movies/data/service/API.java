@@ -3,22 +3,14 @@ package com.example.movies.data.service;
 import com.example.movies.data.entity.ActorsEntity;
 import com.example.movies.data.entity.ActorsMoviesEntity;
 import com.example.movies.data.entity.ActorsPhotoEntity;
-import com.example.movies.data.entity.BaseEntity2;
-import com.example.movies.data.entity.Cast;
+import com.example.movies.data.entity.ActorsTaggedImages;
+import com.example.movies.data.entity.BaseEntity;
 import com.example.movies.data.entity.DetailInfo;
 import com.example.movies.data.entity.GalleryPhotoModel;
 import com.example.movies.data.entity.MovieCrew;
-import com.example.movies.data.entity.Recommended;
-import com.example.movies.data.entity.SimilarMovies;
+import com.example.movies.data.entity.PersonP;
 import com.example.movies.data.entity.TabPersonEntity;
-import com.example.movies.data.entity.BaseEntity;
-import com.example.movies.data.entity.BaseEntityTrending;
-import com.example.movies.data.entity.BaseEntityTv;
-import com.example.movies.data.entity.SearchMovieBaseEntity;
-import com.example.movies.data.entity.SearchTvBaseEntity;
 import com.example.movies.data.entity.Trailers;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -59,17 +51,17 @@ public interface API {
     Call<TabPersonEntity> getTrendPerson(@Query("api_key") String apikey);
 
     @GET("search/movie")
-    Call<SearchMovieBaseEntity> getSearchMovie(@Query("api_key") String apikey,
-                                               @Query("language") String language,
-                                               @Query("query") String query,
-                                               @Query("page") int page,
-                                               @Query("include_adult") boolean includeAdult);
+    Call<BaseEntity> getSearchMovie(@Query("api_key") String apikey,
+                                    @Query("language") String language,
+                                    @Query("query") String query,
+                                    @Query("page") int page,
+                                    @Query("include_adult") boolean includeAdult);
 
     @GET("search/tv")
-    Call<SearchTvBaseEntity> getSearchTv(@Query("api_key") String apikey,
-                                         @Query("language") String language,
-                                         @Query("query") String query,
-                                         @Query("page") int page);
+    Call<BaseEntity> getSearchTv(@Query("api_key") String apikey,
+                                 @Query("language") String language,
+                                 @Query("query") String query,
+                                 @Query("page") int page);
 
     @GET("movie/{movie_id}/images")
     Call<GalleryPhotoModel> getBackdrops(
@@ -129,8 +121,21 @@ public interface API {
             @Query("language") String language);
 
     @GET("person/{movie_id}/tv_credits")
-    Call<BaseEntity> getActorsTv(
+    Call<ActorsMoviesEntity> getActorsTv(
             @Path("movie_id") int id,
+            @Query("api_key") String apikey,
+            @Query("language") String language);
+
+    @GET("person/{movie_id}/tagged_images")
+    Call<ActorsTaggedImages> getActorsTaggedImages(
+            @Path("movie_id") int id,
+            @Query("api_key") String apikey,
+            @Query("language") String language,
+            @Query("page") int page);
+
+    @GET("person/{person_id}/")
+    Call<PersonP> getActorsPictures(
+            @Path("person_id") int id,
             @Query("api_key") String apikey,
             @Query("language") String language);
 

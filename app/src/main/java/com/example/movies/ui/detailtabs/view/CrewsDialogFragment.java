@@ -76,7 +76,6 @@ public class CrewsDialogFragment extends DialogFragment implements com.example.m
             });
             adapter.notifyDataSetChanged();
         }
-
     }
 
     @Override
@@ -90,7 +89,6 @@ public class CrewsDialogFragment extends DialogFragment implements com.example.m
                 openDialog();
             }
         });
-
         setRecyclerView();
     }
 
@@ -98,8 +96,6 @@ public class CrewsDialogFragment extends DialogFragment implements com.example.m
         com.example.movies.ui.detailtabs.view.Dialog dialog = new com.example.movies.ui.detailtabs.view.Dialog();
         dialog.setTargetFragment(CrewsDialogFragment.this, 1);
         dialog.show(getFragmentManager(), "dialog");
-
-
     }
 
     private void setRecyclerView() {

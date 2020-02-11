@@ -17,6 +17,10 @@ import android.widget.Toast;
 
 import com.example.movies.R;
 import com.example.movies.core.base.BaseFragment;
+import com.example.movies.core.helper.DateFormatHelper;
+import com.example.movies.core.helper.LanguageHelper;
+import com.example.movies.core.helper.NumberFormatHelper;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Crew;
 import com.example.movies.data.entity.DetailInfo;
 import com.example.movies.data.entity.Genres;
@@ -31,14 +35,10 @@ import com.example.movies.ui.detailtabs.adapter.InfoAdapter;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 
 public class InfoFragment extends BaseFragment {
     @BindView(R.id.text_genres)
@@ -89,13 +89,11 @@ public class InfoFragment extends BaseFragment {
     TextView companies;
     @BindView(R.id.homepage)
     TextView homepage;
-    Unbinder unbinder;
 
-    private String DATE_FORMAT = "yyyy-MM-dd";
+
     private LinearLayoutManager layoutManager;
     private InfoAdapter adapter;
     private ArrayList<Trailer> trailer;
-    private ArrayList<Crew> crews;
     private ArrayList<MovieCrew> movieCrews;
     private ArrayList<DetailInfo> detailInfos;
     private ArrayList<Genres> genres;
@@ -186,9 +184,7 @@ public class InfoFragment extends BaseFragment {
         setTexts(list.getCrew());
     }
 
-    private void setTexts(final ArrayList<Crew> list) {
-        crews = new ArrayList<>();
-        crews.addAll(list);
+    private void setTexts(final ArrayList<Crew> crews) {
         String[] crew = new String[crews.size()];
         String[] crew2 = new String[crews.size()];
         String liste = "";
@@ -224,10 +220,8 @@ public class InfoFragment extends BaseFragment {
         showAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 FragmentManager manager = getFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
-
                 Fragment prev = manager.findFragmentByTag("crews");
                 if (prev != null) {
                     ft.remove(prev);
@@ -255,39 +249,20 @@ public class InfoFragment extends BaseFragment {
         productionCountriess = new ArrayList<>();
         productionCountriess.addAll(productionCountriesArrayList);
         originalName.setText(list.getOriginal_title());
-        String date = list.getRelease_date();
-        SimpleDateFormat spf = new SimpleDateFormat(DATE_FORMAT);
-        try {
-            Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("dd MMM yyyy");
-            date = spf.format(newDate);
-            releaseDate1.setText(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
+        releaseDate1.setText(DateFormatHelper.formatDate(list.getRelease_date()));
         situtation.setText(list.getStatus());
+
         String companiess = " ";
         for (ProductionCompanies s : productionCompanies) {
             String.valueOf(s);
             companiess += s.getName() + ",";
         }
         companies.setText(companiess);
-        NumberFormat formatter = new DecimalFormat("#,###");
-        double myNumber = list.getBudget();
-        String formattedNumber = formatter.format(myNumber);
-        budget.setText("$" + String.valueOf(formattedNumber));
+        budget.setText(NumberFormatHelper.formatNumber((double) list.getBudget()));
         runtime.setText(String.valueOf(list.getRuntime() + " dk"));
 
-        String lng = list.getOriginal_language();
-        Locale loc = new Locale(lng);
-        String name = loc.getDisplayLanguage(loc);
-        originalLanguage.setText(name);
-        // textCertificate.setText(list.get);
-        double mynumber2 = list.getRevenue();
-        String number = formatter.format(mynumber2);
-        revenues.setText(String.valueOf("$" + number));
+        originalLanguage.setText(LanguageHelper.formatLanguage(list.getOriginal_language()));
+        revenues.setText(NumberFormatHelper.formatNumber((double) list.getRevenue()));
         String countries = " ";
         for (ProductionCountries s : productionCountriess) {
             countries += s.getName() + ",";

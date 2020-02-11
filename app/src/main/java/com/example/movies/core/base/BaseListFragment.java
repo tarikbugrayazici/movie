@@ -1,7 +1,6 @@
 package com.example.movies.core.base;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -57,6 +56,8 @@ public abstract class BaseListFragment extends BaseFragment implements RetroFitS
     public void setData(ArrayList<Movie> list) {
         addItemsToList(list);
     }
+
+
 
     @Override
     public void getResult(Result result) {

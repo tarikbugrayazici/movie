@@ -31,7 +31,6 @@ public class SearchTabMovieFragment extends BaseFragment {
     EditText editMovie;
     @BindView(R.id.search_movie_recycler_view)
     RecyclerView searchMovieRecyclerView;
-    Unbinder unbinder;
 
     @Override
     public Integer getFragmentLayoutId() {

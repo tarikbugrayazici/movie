@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Crew;
 import com.example.movies.data.enums.GenderImage;
 
@@ -35,22 +36,18 @@ public class CrewsDialogAdapter extends RecyclerView.Adapter<CrewsDialogAdapter.
     @Override
     public void onBindViewHolder(@NonNull CrewsDialogAdapter.CrewsViewHolder holder, int position) {
         final Crew crew = list.get(position);
-        String url = "https://image.tmdb.org/t/p/w500";
-
-        if (crew.getProfile_path() != null){
-            url += crew.getProfile_path();
-
+        if (crew.getProfile_path() != null) {
             Glide.with(context)
-                    .load(url)
+                    .load(Constants.IMAGE_BASE_PATH + crew.getProfile_path())
                     .placeholder(R.drawable.female)
                     .centerCrop()
                     .into(holder.imageView);
-        }else {
+        } else {
             int profilePhoto = R.drawable.male;
 
-            if (crew.getGender() == GenderImage.MALE.getGenderImage()){
+            if (crew.getGender() == GenderImage.MALE.getGenderImage()) {
                 profilePhoto = R.drawable.male;
-            }else if (crew.getGender() == GenderImage.FEMALE.getGenderImage()){
+            } else if (crew.getGender() == GenderImage.FEMALE.getGenderImage()) {
                 profilePhoto = R.drawable.female;
             }
 

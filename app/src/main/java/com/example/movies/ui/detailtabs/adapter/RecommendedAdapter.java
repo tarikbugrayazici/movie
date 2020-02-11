@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
 import com.example.movies.core.navigation.Navigation;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Movie;
 
 import java.util.ArrayList;
@@ -50,9 +51,8 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof RecommendedViewHolder) {
             final Movie recommendedMovie = list.get(position);
-            String url = "https://image.tmdb.org/t/p/w500";
             Glide.with(context)
-                    .load(url + recommendedMovie.getPoster_path())
+                    .load(Constants.IMAGE_BASE_PATH + recommendedMovie.getPoster_path())
                     .centerCrop()
                     .into(((RecommendedViewHolder) holder).imgViewCardView);
 

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.ActorsPhotos;
 
 import java.util.ArrayList;
@@ -37,10 +38,9 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     @Override
     public void onBindViewHolder(@NonNull InfoViewHolder holder, int position) {
         final ActorsPhotos actorsPhotos = list.get(position);
-        String url = "https://image.tmdb.org/t/p/w500";
         Glide
                 .with(context)
-                .load(url + actorsPhotos.getFile_path())
+                .load(Constants.IMAGE_BASE_PATH + actorsPhotos.getFile_path())
                 .centerCrop()
                 .into(holder.photo);
     }

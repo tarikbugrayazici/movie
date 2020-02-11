@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
 import com.example.movies.core.navigation.Navigation;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Person;
 
 import java.util.ArrayList;
@@ -49,8 +50,7 @@ public class TabPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (holder instanceof PersonViewHolder) {
 
             final Person person = list.get(position);
-            String url = "https://image.tmdb.org/t/p/w500";
-            Glide.with(context).load(url + person.getProfile_path())
+            Glide.with(context).load(Constants.IMAGE_BASE_PATH + person.getProfile_path())
                     .centerCrop().into(((PersonViewHolder) holder).imgView);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -23,7 +22,6 @@ import com.example.movies.data.service.RetroFitService;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
 
 
@@ -40,9 +38,6 @@ public class ActorsDetailActivity extends BaseActivity {
     CircleIndicator circleIndicator;
     private int id;
     private ArrayList<Media> media = new ArrayList<>();
-    private ArrayList<ActorsResult> actorsResults = new ArrayList<>();
-    //   private Cast cast;
-    private ArrayList<PersonP> person = new ArrayList<>();
     RetroFitService service = new RetroFitService();
 
     @Override
@@ -55,17 +50,11 @@ public class ActorsDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
         id = i.getIntExtra("actor", 0);
-        //  cast = i.getParcelableExtra("cast");
-
-
         ActorsDetailTabAdapter actorsDetailTabAdapter = new ActorsDetailTabAdapter(getSupportFragmentManager(), this, id);
         viewPagerTab.setAdapter(actorsDetailTabAdapter);
         tabLayout.setupWithViewPager(viewPagerTab);
-
-
         fetchActorsDetail(id);
         fetchActorsPictures();
-
     }
 
     private void fetchActorsPictures() {
@@ -99,7 +88,6 @@ public class ActorsDetailActivity extends BaseActivity {
     }
 
     private void setProfilePicture(PersonP list) {
-        person.add(list);
         Glide.with(this)
                 .load(ImageHelper.getImageUrl(list.getProfile_path()))
                 .centerCrop()
@@ -108,7 +96,6 @@ public class ActorsDetailActivity extends BaseActivity {
 
 
     private void setData(ArrayList<ActorsResult> list) {
-        actorsResults.addAll(list);
         setMedia(list);
     }
 

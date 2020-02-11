@@ -74,9 +74,6 @@ public class ActorsFragment extends BaseFragment implements Dialog.DialogListene
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerViewPerson = view.findViewById(R.id.recycler_view_person);
-        numberOfActors = view.findViewById(R.id.number_of_actors);
-        sort = view.findViewById(R.id.sort);
         sort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

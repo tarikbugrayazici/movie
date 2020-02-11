@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Backdrops;
 import com.example.movies.data.entity.Media;
 
@@ -30,8 +31,7 @@ public class PagerAdapterSlideActor extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         Media media = list.get(position);
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        String url = "https://image.tmdb.org/t/p/w500";
-        String imgUrl = url + media.getPoster_path();
+        String imgUrl = Constants.IMAGE_BASE_PATH + media.getPoster_path();
         ViewGroup viewGroup = (ViewGroup) layoutInflater.inflate(R.layout.view_pager_item, container, false);
         container.addView(viewGroup);
         ImageView imageView = viewGroup.findViewById(R.id.image);

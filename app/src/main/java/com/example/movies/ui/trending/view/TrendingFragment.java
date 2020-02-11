@@ -11,7 +11,7 @@ import com.example.movies.core.base.BaseFragment;
 import com.example.movies.ui.trending.adapter.TabLayoutAdapter;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
+
 
 
 /**

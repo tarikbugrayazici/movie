@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.movies.R;
 import com.example.movies.core.base.BaseFragment;
+import com.example.movies.core.helper.DateFormatHelper;
 import com.example.movies.data.entity.ActorsEntity;
 import com.example.movies.data.entity.ActorsPhotoEntity;
 import com.example.movies.data.entity.ActorsPhotos;
@@ -18,10 +19,7 @@ import com.example.movies.data.entity.Result;
 import com.example.movies.data.service.RetroFitService;
 import com.example.movies.ui.actorsdetailtabs.adapter.InfoAdapter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.BindView;
 
@@ -36,11 +34,8 @@ public class InfoFragment extends BaseFragment {
     TextView biography;
     @BindView(R.id.actors_photo_recyclerview)
     RecyclerView actorsPhotoRecyclerview;
-    private ArrayList<ActorsPhotos> actorsPhotos = new ArrayList<>();
     private InfoAdapter adapter;
     private LinearLayoutManager layoutManager;
-    private String DATE_FORMAT = "yyyy-MM-dd";
-    private ArrayList<ActorsEntity> actorsEntities = new ArrayList<>();
     private int id;
     private boolean isCharacterCountOfOverviewOverflowed = false;
     RetroFitService service = new RetroFitService();
@@ -92,31 +87,19 @@ public class InfoFragment extends BaseFragment {
     }
 
     private void setPhotos(ArrayList<ActorsPhotos> list) {
-        actorsPhotos.addAll(list);
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         actorsPhotoRecyclerview.setLayoutManager(layoutManager);
-        adapter = new InfoAdapter(getContext(), actorsPhotos);
+        adapter = new InfoAdapter(getContext(), list);
         actorsPhotoRecyclerview.setAdapter(adapter);
     }
 
     private void setData(ActorsEntity list) {
-        actorsEntities.add(list);
         setItems(list);
     }
 
     private void setItems(ActorsEntity list) {
         if (list.getBiography() != null && list.getBirthday() != null) {
-            String date = list.getBirthday();
-            SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-            try {
-                Date newDate = dateFormat.parse(date);
-                dateFormat = new SimpleDateFormat("dd MMM yyyy");
-                date = dateFormat.format(newDate);
-                birthday.setText("Doğum Tarihi: " + date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            birthPlace.setText("Şehri, Ülkesi: " + list.getPlace_of_birth());
+            birthPlace.setText(DateFormatHelper.formatDate(list.getPlace_of_birth()));
 
             final String bio = list.getBiography();
             isCharacterCountOfOverviewOverflowed = bio.length() > 140;
@@ -136,6 +119,7 @@ public class InfoFragment extends BaseFragment {
                     }
                 }
             });
+
         } else {
             birthday.setText("empty");
             birthPlace.setText("empty");

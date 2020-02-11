@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
 import com.example.movies.core.navigation.Navigation;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Movie;
 
 import java.util.ArrayList;
@@ -36,8 +37,7 @@ public class TabAllAdapter extends RecyclerView.Adapter<TabAllAdapter.TabAllAdap
     @Override
     public void onBindViewHolder(TabAllAdapterHolder holder, int position) {
         final Movie movie = list.get(position);
-        String url = "https://image.tmdb.org/t/p/w500";
-        Glide.with(context).load(url + movie.getPoster_path())
+        Glide.with(context).load(Constants.IMAGE_BASE_PATH + movie.getPoster_path())
                 .centerCrop().into(holder.imgView);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Trailer;
 
 import java.util.ArrayList;
@@ -39,8 +40,8 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
     @Override
     public void onBindViewHolder(@NonNull InfoViewHolder holder, int position) {
         final Trailer trailer = list.get(position);
-        String url = "https://img.youtube.com/vi/";
-        Glide.with(context).load(url + trailer.getKey() + "/hqdefault.jpg")
+
+        Glide.with(context).load(Constants.TRAILER_BASE_PATH + trailer.getKey() + "/hqdefault.jpg")
                 .placeholder(new ColorDrawable(context.getResources().getColor(R.color.colorBlack)))
                 .centerCrop().into(holder.imgTrailer);
         holder.trailer.setText(trailer.getName());
@@ -48,7 +49,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://www.youtube.com/watch?v=" + trailer.getKey()));
+                        Uri.parse(Constants.TRAILER_BASE_PATH + trailer.getKey()));
                 v.getContext().startActivity(intent);
             }
         });
@@ -67,7 +68,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
 
         public InfoViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

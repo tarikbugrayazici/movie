@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
 import com.example.movies.core.navigation.Navigation;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Cast;
 import com.example.movies.data.enums.GenderImage;
 
@@ -50,16 +51,11 @@ public class ActorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ActorsViewHolder) {
-
             final Cast cast = list.get(position);
 
-            String url = "https://image.tmdb.org/t/p/w500";
-
             if (cast.getProfile_path() != null) {
-                url += cast.getProfile_path();
-
                 Glide.with(context)
-                        .load(url)
+                        .load(Constants.IMAGE_BASE_PATH + cast.getProfile_path())
                         .centerCrop()
                         .into(((ActorsViewHolder) holder).imgCast);
             } else {

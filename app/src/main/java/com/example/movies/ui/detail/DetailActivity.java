@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
 import com.example.movies.core.base.BaseActivity;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Backdrops;
 import com.example.movies.data.entity.DetailInfo;
 import com.example.movies.data.entity.GalleryPhotoModel;
@@ -21,7 +21,6 @@ import com.example.movies.data.service.RetroFitService;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 
@@ -68,7 +67,6 @@ public class DetailActivity extends BaseActivity {
             @Override
             public void getResult(Result result) {
                 Result<DetailInfo> detailInfoResult = result;
-
                 if (detailInfoResult.getData() != null) {
                     setData(detailInfoResult.getData());
                 } else {
@@ -76,7 +74,6 @@ public class DetailActivity extends BaseActivity {
                 }
             }
         };
-
         service.fetchMovieDetail(id, serviceCallBack);
     }
 
@@ -93,7 +90,6 @@ public class DetailActivity extends BaseActivity {
                 }
             }
         };
-
         service.fetchBackDrops(id, serviceCallBack);
     }
 
@@ -102,8 +98,7 @@ public class DetailActivity extends BaseActivity {
         movieName.setText(list.getTitle());
         String title = list.getTitle();
         getSupportActionBar().setTitle(title);
-        String url = "https://image.tmdb.org/t/p/w500";
-        Glide.with(this).load(url + list.getPoster_path()).centerCrop().into(profileImage);
+        Glide.with(this).load(Constants.IMAGE_BASE_PATH + list.getPoster_path()).centerCrop().into(profileImage);
 
     }
 

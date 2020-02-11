@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.movies.R;
+import com.example.movies.core.base.BaseFragment;
 import com.example.movies.data.entity.BaseEntity;
 import com.example.movies.data.entity.Movie;
 import com.example.movies.data.entity.Result;
@@ -28,21 +29,18 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class SearchTabTvFragment extends Fragment {
+public class SearchTabTvFragment extends BaseFragment {
     RetroFitService service = new RetroFitService();
     @BindView(R.id.edit_tv)
     EditText editTv;
     @BindView(R.id.search_tv_recycler_view)
     RecyclerView searchTvRecyclerView;
-    Unbinder unbinder;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search_tab_tv, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+    public Integer getFragmentLayoutId() {
+        return R.layout.fragment_search_tab_tv;
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -89,11 +87,5 @@ public class SearchTabTvFragment extends Fragment {
         searchTvs.addAll(list);
         SearchTabTvAdapter adapter = new SearchTabTvAdapter(getContext(), searchTvs);
         searchTvRecyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 }

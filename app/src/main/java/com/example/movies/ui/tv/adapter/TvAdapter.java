@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
 import com.example.movies.core.navigation.Navigation;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.Movie;
 
 import java.util.ArrayList;
@@ -48,8 +49,7 @@ public class TvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof TvViewHolder) {
 
             final Movie movie = list.get(position);
-            String url = "https://image.tmdb.org/t/p/w500";
-            Glide.with(context).load(url + movie.getPoster_path())
+            Glide.with(context).load(Constants.IMAGE_BASE_PATH + movie.getPoster_path())
                     .centerCrop().into(((TvViewHolder) holder).imgView);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

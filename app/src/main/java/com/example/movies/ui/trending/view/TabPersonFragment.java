@@ -24,7 +24,7 @@ import butterknife.Unbinder;
 public class TabPersonFragment extends BaseFragment {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    Unbinder unbinder;
+
     private TabPersonAdapter adapter;
     private ArrayList<Person> people = new ArrayList<>();
     private GridLayoutManager layoutManager;

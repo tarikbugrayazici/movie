@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.movies.R;
+import com.example.movies.core.util.Constants;
 import com.example.movies.data.entity.CastDetail;
 
 import java.util.ArrayList;
@@ -49,18 +50,16 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof GridLayoutViewHolder) {
             final CastDetail castDetail = list.get(position);
-            String url = "https://image.tmdb.org/t/p/w500";
             Glide
                     .with(context)
-                    .load(url + castDetail.getPoster_path())
+                    .load(Constants.IMAGE_BASE_PATH + castDetail.getPoster_path())
                     .centerCrop()
                     .into(((GridLayoutViewHolder) viewHolder).imgViewCardView);
         } else if (viewHolder instanceof LinearLayoutViewHolder) {
             final CastDetail castDetail = list.get(position);
-            String url = "https://image.tmdb.org/t/p/w500";
             Glide
                     .with(context)
-                    .load(url + castDetail.getPoster_path())
+                    .load(Constants.IMAGE_BASE_PATH + castDetail.getPoster_path())
                     .centerCrop()
                     .into(((LinearLayoutViewHolder) viewHolder).imgViewCardViewLinear);
         }

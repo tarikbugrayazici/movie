@@ -2,37 +2,32 @@ package com.example.movies.core.base;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.example.movies.R;
 import com.example.movies.data.entity.BaseEntity;
 import com.example.movies.data.entity.Movie;
 import com.example.movies.data.entity.Result;
 import com.example.movies.data.service.RetroFitService;
-import com.example.movies.ui.movie.adapter.MovieAdapter;
 
 import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public abstract class BasePageableFragment extends BaseListFragment implements RetroFitService.ResultCallBack {
 
     private boolean isLoadingShowed = false;
     public int pagination = 1;
     public int sizeOfPage = 0;
+    public int id;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initScrollListener();
+        if (getArguments() != null) {
+            id = getArguments().getInt("id");
+            setRecyclerView();
+            initScrollListener();
+            fetchRequest();
+        }
     }
 
     private void initScrollListener() {

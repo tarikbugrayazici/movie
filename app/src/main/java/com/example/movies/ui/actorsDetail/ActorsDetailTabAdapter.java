@@ -26,9 +26,9 @@ public class ActorsDetailTabAdapter extends FragmentPagerAdapter {
             case 0:
                 return InfoFragment.newInstance(id);
             case 1:
-                return MoviesFragment.newInstance(id);
+                return MoviesFragment.Companion.newInstance(id);
             case 2:
-                return  TvShowsFragment.newInstance(id);
+                return  TvShowsFragment.Companion.newInstance(id);
             default:
                 return null;
         }

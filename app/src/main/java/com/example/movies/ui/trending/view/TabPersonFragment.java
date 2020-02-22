@@ -22,7 +22,7 @@ import butterknife.Unbinder;
 
 
 public class TabPersonFragment extends BaseFragment {
-    @BindView(R.id.recycler_view)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     private TabPersonAdapter adapter;

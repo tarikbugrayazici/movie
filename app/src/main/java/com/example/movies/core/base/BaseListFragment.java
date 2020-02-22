@@ -18,7 +18,7 @@ import butterknife.BindView;
 
 public abstract class BaseListFragment extends BaseFragment implements RetroFitService.ResultCallBack {
 
-    @BindView(R.id.recycler_view)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     public MovieAdapter adapter;

@@ -8,6 +8,7 @@ import com.example.movies.data.entity.BaseEntity
 import com.example.movies.data.entity.Movie
 import com.example.movies.data.entity.Result
 import com.example.movies.data.service.RetroFitService
+import kotlinx.android.synthetic.main.fragment_layout.*
 
 import java.util.ArrayList
 
@@ -37,7 +38,7 @@ abstract class BasePageableFragment : BaseListFragment(), RetroFitService.Result
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!isLoadingShowed) {
-                    if (layoutManager != null && layoutManager.findLastCompletelyVisibleItemPosition() == list.size - 1) {
+                    if (layoutManager != null && layoutManager?.findLastCompletelyVisibleItemPosition() == list.size - 1) {
                         loadMore()
                         isLoadingShowed = true
                     }
@@ -49,22 +50,24 @@ abstract class BasePageableFragment : BaseListFragment(), RetroFitService.Result
     private fun loadMore() {
         pagination++
         list.add(null)
-        adapter.notifyDataSetChanged()
+        adapter?.notifyDataSetChanged()
         fetchRequest()
     }
 
     fun setLoadingCase() {
         if (isLoadingShowed) {
             list.removeAt(list.size - 1)
-            adapter.notifyDataSetChanged()
+            adapter?.notifyDataSetChanged()
             isLoadingShowed = false
         }
     }
 
-    override fun addItemsToList(list: ArrayList<Movie>) {
-        sizeOfPage = list.size
+    override fun addItemsToList(list: ArrayList<Movie>?) {
+        sizeOfPage = list?.size!!
         super.addItemsToList(list)
     }
+
+
 
     override fun setData(list: ArrayList<Movie>?) {
         setLoadingCase()

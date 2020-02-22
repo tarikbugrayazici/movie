@@ -249,7 +249,7 @@ public class InfoFragment extends BaseFragment {
         productionCountriess = new ArrayList<>();
         productionCountriess.addAll(productionCountriesArrayList);
         originalName.setText(list.getOriginal_title());
-        releaseDate1.setText(DateFormatHelper.formatDate(list.getRelease_date()));
+        releaseDate1.setText(DateFormatHelper.INSTANCE.formatDate(list.getRelease_date()));
         situtation.setText(list.getStatus());
 
         String companiess = " ";

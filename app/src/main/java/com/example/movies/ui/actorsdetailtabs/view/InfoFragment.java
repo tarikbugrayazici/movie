@@ -99,7 +99,7 @@ public class InfoFragment extends BaseFragment {
 
     private void setItems(ActorsEntity list) {
         if (list.getBiography() != null && list.getBirthday() != null) {
-            birthPlace.setText(DateFormatHelper.formatDate(list.getPlace_of_birth()));
+            birthPlace.setText(DateFormatHelper.INSTANCE.formatDate(list.getPlace_of_birth()));
 
             final String bio = list.getBiography();
             isCharacterCountOfOverviewOverflowed = bio.length() > 140;

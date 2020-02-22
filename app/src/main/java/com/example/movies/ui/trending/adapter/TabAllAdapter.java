@@ -37,7 +37,7 @@ public class TabAllAdapter extends RecyclerView.Adapter<TabAllAdapter.TabAllAdap
     @Override
     public void onBindViewHolder(TabAllAdapterHolder holder, int position) {
         final Movie movie = list.get(position);
-        Glide.with(context).load(Constants.IMAGE_BASE_PATH + movie.getPoster_path())
+        Glide.with(context).load(Constants.IMAGE_BASE_PATH+ movie.getPoster_path())
                 .centerCrop().into(holder.imgView);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

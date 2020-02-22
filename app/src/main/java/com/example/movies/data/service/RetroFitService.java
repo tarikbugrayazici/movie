@@ -119,7 +119,7 @@ public class RetroFitService {
         ApiResponse.callRetrofit(call, resultCallBack);
     }
 
-    public void fetchTv(int page,  ResultCallBack resultCallBack) {
+    public void fetchTv(int page, ResultCallBack resultCallBack) {
         Call<BaseEntity> call = retrofitApi.getTv(
                 Constants.API_KEY,
                 Constants.LANGUAGE_CODE,

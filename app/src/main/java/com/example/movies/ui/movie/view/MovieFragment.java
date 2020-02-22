@@ -10,6 +10,6 @@ public class MovieFragment extends BasePageableFragment {
 
     @Override
     public void fetchRequest() {
-        service.fetchMovies(pagination, this);
+        service.fetchMovies(getPagination(), this);
     }
 }

@@ -10,7 +10,7 @@ public class TvFragment extends BasePageableFragment {
 
     @Override
     public void fetchRequest() {
-        service.fetchTv(pagination, this);
+        service.fetchTv(getPagination(), this);
     }
 }
 

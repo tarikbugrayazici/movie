@@ -28,9 +28,9 @@ public class DetailTabAdapter extends FragmentPagerAdapter {
             case 1:
                 return  ActorsFragment.newInstance(id);
             case 2:
-                return  SimilarFragment.newInstance(id);
+                return  SimilarFragment.Companion.newInstance(id);
             case 3:
-                return  RecommendedFragment.newInstance(id);
+                return  RecommendedFragment.Companion.newInstance(id);
             default:
                 return null;
         }

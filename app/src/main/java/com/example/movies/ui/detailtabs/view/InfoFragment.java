@@ -258,11 +258,11 @@ public class InfoFragment extends BaseFragment {
             companiess += s.getName() + ",";
         }
         companies.setText(companiess);
-        budget.setText(NumberFormatHelper.formatNumber((double) list.getBudget()));
+        budget.setText(NumberFormatHelper.INSTANCE.formatNumber((double) list.getBudget()));
         runtime.setText(String.valueOf(list.getRuntime() + " dk"));
 
         originalLanguage.setText(LanguageHelper.formatLanguage(list.getOriginal_language()));
-        revenues.setText(NumberFormatHelper.formatNumber((double) list.getRevenue()));
+        revenues.setText(NumberFormatHelper.INSTANCE.formatNumber((double) list.getRevenue()));
         String countries = " ";
         for (ProductionCountries s : productionCountriess) {
             countries += s.getName() + ",";

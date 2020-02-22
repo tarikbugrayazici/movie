@@ -89,7 +89,7 @@ public class ActorsDetailActivity extends BaseActivity {
 
     private void setProfilePicture(PersonP list) {
         Glide.with(this)
-                .load(ImageHelper.getImageUrl(list.getProfile_path()))
+                .load(ImageHelper.INSTANCE.getImageUrl(list.getProfile_path()))
                 .centerCrop()
                 .into(imageView);
     }

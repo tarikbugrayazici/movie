@@ -22,6 +22,7 @@ import com.example.movies.data.service.RetroFitService;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
 
 
@@ -48,6 +49,7 @@ public class ActorsDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
         Intent i = getIntent();
         id = i.getIntExtra("actor", 0);
         ActorsDetailTabAdapter actorsDetailTabAdapter = new ActorsDetailTabAdapter(getSupportFragmentManager(), this, id);

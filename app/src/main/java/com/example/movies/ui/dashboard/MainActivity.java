@@ -16,6 +16,7 @@ import com.example.movies.ui.trending.view.TrendingFragment;
 import com.example.movies.ui.tv.view.TvFragment;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends BaseActivity implements
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
         bottomNav.setOnNavigationItemSelectedListener(this);
         //BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         fragmentManager.beginTransaction().add(R.id.frame_container, trending, "4").hide(trending).commit();

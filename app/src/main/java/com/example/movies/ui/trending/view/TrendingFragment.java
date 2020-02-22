@@ -25,7 +25,7 @@ public class TrendingFragment extends BaseFragment {
     ViewPager viewPager;
 
     @Override
-    public Integer getFragmentLayoutId() {
+    public int getFragmentLayoutId() {
         return R.layout.trending_fragment_layout;
     }
 

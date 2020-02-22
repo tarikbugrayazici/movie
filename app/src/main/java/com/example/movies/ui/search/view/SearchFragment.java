@@ -26,7 +26,7 @@ public class SearchFragment extends BaseFragment {
     ViewPager searchViewPager;
 
     @Override
-    public Integer getFragmentLayoutId() {
+    public int getFragmentLayoutId() {
         return R.layout.search_fragment_layout;
     }
 

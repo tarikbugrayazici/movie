@@ -38,7 +38,7 @@ public class ActorsFragment extends BaseFragment implements Dialog.DialogListene
     RetroFitService service = new RetroFitService();
 
     @Override
-    public Integer getFragmentLayoutId() {
+    public int getFragmentLayoutId() {
         return R.layout.actors;
     }
 

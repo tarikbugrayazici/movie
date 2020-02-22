@@ -33,7 +33,7 @@ public class SearchTabMovieFragment extends BaseFragment {
     RecyclerView searchMovieRecyclerView;
 
     @Override
-    public Integer getFragmentLayoutId() {
+    public int getFragmentLayoutId() {
         return R.layout.fragment_search_tab_movie;
     }
 

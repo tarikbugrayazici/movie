@@ -27,7 +27,7 @@ abstract class BaseSimilarPageableFragment : BaseFragment(), RetroFitService.Res
 
     abstract fun fetchRequest()
 
-    override fun getFragmentLayoutId(): Int? {
+    override fun getFragmentLayoutId(): Int {
         return R.layout.fragment_layout
     }
 

@@ -26,7 +26,7 @@ abstract class BaseListFragment : BaseFragment(), RetroFitService.ResultCallBack
 
     abstract fun fetchRequest()
 
-    override fun getFragmentLayoutId(): Int? {
+    override fun getFragmentLayoutId(): Int {
         return R.layout.fragment_layout
     }
 

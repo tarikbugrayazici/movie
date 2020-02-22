@@ -37,7 +37,7 @@ public class SearchTabTvFragment extends BaseFragment {
     RecyclerView searchTvRecyclerView;
 
     @Override
-    public Integer getFragmentLayoutId() {
+    public int getFragmentLayoutId() {
         return R.layout.fragment_search_tab_tv;
     }
 

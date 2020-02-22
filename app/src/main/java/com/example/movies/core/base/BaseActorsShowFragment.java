@@ -33,7 +33,7 @@ public abstract class BaseActorsShowFragment extends BaseFragment implements Ret
 
 
     @Override
-    public Integer getFragmentLayoutId() {
+    public int getFragmentLayoutId() {
         return R.layout.actors_movies;
     }
 

@@ -34,7 +34,7 @@ public class TabPersonFragment extends BaseFragment {
     RetroFitService service = new RetroFitService();
 
     @Override
-    public Integer getFragmentLayoutId() {
+    public int getFragmentLayoutId() {
         return R.layout.fragment_layout;
     }
 

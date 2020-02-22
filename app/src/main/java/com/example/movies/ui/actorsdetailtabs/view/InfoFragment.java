@@ -41,7 +41,7 @@ public class InfoFragment extends BaseFragment {
     RetroFitService service = new RetroFitService();
 
     @Override
-    public Integer getFragmentLayoutId() {
+    public int getFragmentLayoutId() {
         return R.layout.actors_detail_info_items;
     }
 

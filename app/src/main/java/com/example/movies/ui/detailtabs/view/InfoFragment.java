@@ -104,7 +104,7 @@ public class InfoFragment extends BaseFragment {
 
 
     @Override
-    public Integer getFragmentLayoutId() {
+    public int getFragmentLayoutId() {
         return R.layout.tab_bilgiler_item;
     }
 

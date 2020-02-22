@@ -42,7 +42,7 @@ public class TabAllAdapter extends RecyclerView.Adapter<TabAllAdapter.TabAllAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.startDetailActivity(context, movie.getId());
+                Navigation.INSTANCE.startDetailActivity(context, movie.getId());
 
             }
         });

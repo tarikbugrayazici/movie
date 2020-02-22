@@ -56,7 +56,7 @@ public class SimilarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Navigation.startDetailActivity(context, similarMovie.getId());
+                    Navigation.INSTANCE.startDetailActivity(context, similarMovie.getId());
                 }
             });
         } else if (holder instanceof LoadingViewHolder) {

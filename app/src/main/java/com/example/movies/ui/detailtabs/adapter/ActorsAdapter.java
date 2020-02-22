@@ -74,7 +74,7 @@ public class ActorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Navigation.startActorsDetailActivity(context, cast.getId());
+                    Navigation.INSTANCE.startActorsDetailActivity(context, cast.getId());
                 }
             });
 

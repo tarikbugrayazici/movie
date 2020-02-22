@@ -57,7 +57,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((MovieViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Navigation.startDetailActivity(context, movie.getId());
+                    Navigation.INSTANCE.startDetailActivity(context, movie.getId());
                 }
             });
         } else if (holder instanceof LoadingViewHolder) {

@@ -55,7 +55,7 @@ public class TabPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Navigation.startActorsDetailActivity(context, person.getId());
+                    Navigation.INSTANCE.startActorsDetailActivity(context, person.getId());
                 }
             });
         } else if (holder instanceof LoadingViewHolder) {

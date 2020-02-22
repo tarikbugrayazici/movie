@@ -59,7 +59,7 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((RecommendedViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Navigation.startDetailActivity(context, recommendedMovie.getId());
+                    Navigation.INSTANCE.startDetailActivity(context, recommendedMovie.getId());
                 }
             });
 

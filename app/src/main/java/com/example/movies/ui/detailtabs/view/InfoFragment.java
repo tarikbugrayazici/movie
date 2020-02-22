@@ -261,7 +261,7 @@ public class InfoFragment extends BaseFragment {
         budget.setText(NumberFormatHelper.INSTANCE.formatNumber((double) list.getBudget()));
         runtime.setText(String.valueOf(list.getRuntime() + " dk"));
 
-        originalLanguage.setText(LanguageHelper.formatLanguage(list.getOriginal_language()));
+        originalLanguage.setText(LanguageHelper.INSTANCE.formatLanguage(list.getOriginal_language()));
         revenues.setText(NumberFormatHelper.INSTANCE.formatNumber((double) list.getRevenue()));
         String countries = " ";
         for (ProductionCountries s : productionCountriess) {

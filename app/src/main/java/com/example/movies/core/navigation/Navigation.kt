@@ -2,8 +2,8 @@ package com.example.movies.core.navigation
 
 import android.content.Context
 import android.content.Intent
-
 import com.example.movies.ui.actorsDetail.ActorsDetailActivity
+
 import com.example.movies.ui.detail.DetailActivity
 
 object Navigation {

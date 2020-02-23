@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -22,21 +21,21 @@ import com.example.movies.data.service.RetroFitService;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.relex.circleindicator.CircleIndicator;
 
 
 public class ActorsDetailActivity extends BaseActivity {
-    @BindView(R.id.circular_image_actor)
-    ImageView imageView;
-    @BindView(R.id.view_pager_actor_tab)
+    @BindView(R.id.viewPagerTab)
     ViewPager viewPagerTab;
-    @BindView(R.id.view_pager_actor)
-    ViewPager viewPagerActor;
-    @BindView(R.id.tab_layout_actors)
-    TabLayout tabLayout;
-    @BindView(R.id.circular_indicator)
+    @BindView(R.id.circleIndicator)
     CircleIndicator circleIndicator;
+    @BindView(R.id.imageView)
+    CircleImageView imageView;
+    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+    @BindView(R.id.viewPagerActor)
+    ViewPager viewPagerActor;
     private int id;
     private ArrayList<Media> media = new ArrayList<>();
     RetroFitService service = new RetroFitService();
@@ -49,7 +48,6 @@ public class ActorsDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
         Intent i = getIntent();
         id = i.getIntExtra("actor", 0);
         ActorsDetailTabAdapter actorsDetailTabAdapter = new ActorsDetailTabAdapter(getSupportFragmentManager(), this, id);

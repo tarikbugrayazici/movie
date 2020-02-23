@@ -19,18 +19,18 @@
             android:orientation="vertical">
 
             <android.support.v4.view.ViewPager
-                android:id="@+id/view_pager_actor"
+                android:id="@+id/viewPagerTab"
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
 
             <me.relex.circleindicator.CircleIndicator
-                android:id="@+id/circular_indicator"
+                android:id="@+id/circleIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="170dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/circular_image_actor"
+                android:id="@+id/imageView"
                 android:layout_width="126dp"
                 android:layout_height="126dp"
                 android:layout_centerHorizontal="true"
@@ -39,14 +39,14 @@
         </RelativeLayout>
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout_actors"
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabTextAppearance="@style/MyCustomTabText"
             app:tabTextColor="@color/colorWhite" />
 
         <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager_actor_tab"
+            android:id="@+id/viewPagerActor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

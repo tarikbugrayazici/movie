@@ -24,9 +24,9 @@ public class DetailTabAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return InfoFragment.newInstance(id);
+                return InfoFragment.Companion.newInstance(id);
             case 1:
-                return  ActorsFragment.newInstance(id);
+                return  ActorsFragment.Companion.newInstance(id);
             case 2:
                 return  SimilarFragment.Companion.newInstance(id);
             case 3:

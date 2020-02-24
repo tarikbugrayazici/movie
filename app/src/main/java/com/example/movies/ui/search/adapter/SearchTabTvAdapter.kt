@@ -6,17 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-
 import com.bumptech.glide.Glide
 import com.example.movies.R
 import com.example.movies.core.navigation.Navigation
 import com.example.movies.core.util.Constants
 import com.example.movies.data.entity.Movie
-
-import java.util.ArrayList
-
-import butterknife.BindView
-import butterknife.ButterKnife
+import java.util.*
 
 class SearchTabTvAdapter(private val context: Context, private val list: ArrayList<Movie>) : RecyclerView.Adapter<SearchTabTvAdapter.SearchTabTvAdapterHolder>() {
 
@@ -28,7 +23,7 @@ class SearchTabTvAdapter(private val context: Context, private val list: ArrayLi
     override fun onBindViewHolder(holder: SearchTabTvAdapterHolder, position: Int) {
         val (_, _, _, poster_path, id) = list[position]
         Glide.with(context).load(Constants.IMAGE_BASE_PATH + poster_path!!)
-                .centerCrop().into(holder.imgView!!)
+                .centerCrop().into(holder.img_view!!)
         holder.itemView.setOnClickListener { Navigation.startDetailActivity(context, id) }
     }
 
@@ -37,11 +32,7 @@ class SearchTabTvAdapter(private val context: Context, private val list: ArrayLi
     }
 
     inner class SearchTabTvAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.img_view)
-        internal var imgView: ImageView? = null
+        val img_view = itemView.findViewById<ImageView>(R.id.img_view)
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
     }
 }

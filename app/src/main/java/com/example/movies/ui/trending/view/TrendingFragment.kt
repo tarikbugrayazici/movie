@@ -10,6 +10,7 @@ import com.example.movies.core.base.BaseFragment
 import com.example.movies.ui.trending.adapter.TabLayoutAdapter
 
 import butterknife.BindView
+import kotlinx.android.synthetic.main.trending_fragment_layout.*
 
 
 /**
@@ -17,10 +18,7 @@ import butterknife.BindView
  */
 
 class TrendingFragment : BaseFragment() {
-    @BindView(R.id.tab_layout)
-    internal var tabLayout: TabLayout? = null
-    @BindView(R.id.view_pager)
-    internal var viewPager: ViewPager? = null
+
 
     override fun getFragmentLayoutId(): Int {
         return R.layout.trending_fragment_layout

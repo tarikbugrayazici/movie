@@ -15,8 +15,6 @@ import com.example.movies.data.entity.Movie
 
 import java.util.ArrayList
 
-import butterknife.BindView
-import butterknife.ButterKnife
 
 class TabAllAdapter(private val context: Context, private val list: ArrayList<Movie>) : RecyclerView.Adapter<TabAllAdapter.TabAllAdapterHolder>() {
 
@@ -28,7 +26,7 @@ class TabAllAdapter(private val context: Context, private val list: ArrayList<Mo
     override fun onBindViewHolder(holder: TabAllAdapterHolder, position: Int) {
         val (_, _, _, poster_path, id) = list[position]
         Glide.with(context).load(Constants.IMAGE_BASE_PATH + poster_path!!)
-                .centerCrop().into(holder.imgView!!)
+                .centerCrop().into(holder.img_view!!)
         holder.itemView.setOnClickListener { Navigation.startDetailActivity(context, id) }
     }
 
@@ -37,11 +35,8 @@ class TabAllAdapter(private val context: Context, private val list: ArrayList<Mo
     }
 
     inner class TabAllAdapterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.img_view)
-        internal var imgView: ImageView? = null
+        internal var img_view: ImageView? = null
 
-        init {
-            ButterKnife.bind(this, itemView)
-        }
+
     }
 }

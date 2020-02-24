@@ -26,8 +26,10 @@ class TrendingFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val tabLayoutAdapter = TabLayoutAdapter(activity!!
-                .supportFragmentManager, context)
+        val tabLayoutAdapter = context?.let {
+            TabLayoutAdapter(activity!!
+                .supportFragmentManager, it)
+        }
         viewPager!!.adapter = tabLayoutAdapter
         tabLayout!!.setupWithViewPager(viewPager)
 

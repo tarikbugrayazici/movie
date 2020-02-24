@@ -12,19 +12,21 @@ import com.bumptech.glide.Glide
 import com.example.movies.R
 import com.example.movies.core.navigation.Navigation
 import com.example.movies.core.util.Constants
-import com.example.movies.data.entity.Movie
+import com.example.movies.data.entity.Person
 
 import java.util.ArrayList
 
+import butterknife.BindView
+import butterknife.ButterKnife
 
-class TabMovieAdapter(private val context: Context, private val list: ArrayList<Movie>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TabPersonAdapter(private val context: Context, private val list: ArrayList<Person>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_ITEM = 0
     private val VIEW_TYPE_LOADING = 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_ITEM) {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_item, parent, false)
-            return TabMovieHolder(view)
+            return PersonViewHolder(view)
         } else {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.progress_bar, parent, false)
             return LoadingViewHolder(view)
@@ -32,15 +34,16 @@ class TabMovieAdapter(private val context: Context, private val list: ArrayList<
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is TabMovieHolder) {
+        if (holder is PersonViewHolder) {
 
-            val (_, _, _, poster_path, id) = list[position]
-            Glide.with(context).load(Constants.IMAGE_BASE_PATH + poster_path!!)
+            val (_, _, _, id, _, _, profile_path) = list[position]
+            Glide.with(context).load(Constants.IMAGE_BASE_PATH + profile_path!!)
                     .centerCrop().into(holder.img_view!!)
-            holder.itemView.setOnClickListener { Navigation.startDetailActivity(context, id) }
+            holder.itemView.setOnClickListener { Navigation.startActorsDetailActivity(context, id) }
         } else if (holder is LoadingViewHolder) {
             showLoadingView(holder, position)
         }
+
 
     }
 
@@ -52,9 +55,8 @@ class TabMovieAdapter(private val context: Context, private val list: ArrayList<
         return if (list[position] == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
     }
 
-    inner class TabMovieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class PersonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val img_view = itemView.findViewById<ImageView>(R.id.img_view)
-
     }
 
     inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

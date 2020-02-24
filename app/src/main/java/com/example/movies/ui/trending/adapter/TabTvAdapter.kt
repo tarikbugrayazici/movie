@@ -17,14 +17,14 @@ import com.example.movies.data.entity.Movie
 import java.util.ArrayList
 
 
-class TabMovieAdapter(private val context: Context, private val list: ArrayList<Movie>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TabTvAdapter(private val context: Context, private val list: ArrayList<Movie>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val VIEW_TYPE_ITEM = 0
     private val VIEW_TYPE_LOADING = 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_ITEM) {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_item, parent, false)
-            return TabMovieHolder(view)
+            return TvViewHolder(view)
         } else {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.progress_bar, parent, false)
             return LoadingViewHolder(view)
@@ -32,7 +32,7 @@ class TabMovieAdapter(private val context: Context, private val list: ArrayList<
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is TabMovieHolder) {
+        if (holder is TvViewHolder) {
 
             val (_, _, _, poster_path, id) = list[position]
             Glide.with(context).load(Constants.IMAGE_BASE_PATH + poster_path!!)
@@ -52,9 +52,8 @@ class TabMovieAdapter(private val context: Context, private val list: ArrayList<
         return if (list[position] == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
     }
 
-    inner class TabMovieHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class TvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val img_view = itemView.findViewById<ImageView>(R.id.img_view)
-
     }
 
     inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

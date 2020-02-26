@@ -18,7 +18,7 @@ import java.util.ArrayList
 import butterknife.BindView
 import butterknife.ButterKnife
 
-class SearchTabMovieAdapter(private val context: Context, private val list: ArrayList<Movie>) : RecyclerView.Adapter<SearchTabMovieAdapter.SearchTabMovieAdapterHolder>() {
+open class SearchTabMovieAdapter(private val context: Context, private val list: ArrayList<Movie>) : RecyclerView.Adapter<SearchTabMovieAdapter.SearchTabMovieAdapterHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchTabMovieAdapterHolder {
         return SearchTabMovieAdapterHolder(LayoutInflater.from(context)

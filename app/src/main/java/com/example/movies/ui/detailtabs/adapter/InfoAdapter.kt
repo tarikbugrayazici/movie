@@ -21,7 +21,8 @@ import java.util.ArrayList
 import butterknife.BindView
 import butterknife.ButterKnife
 
-class InfoAdapter(private val context: Context, private val list: ArrayList<Trailer>) : RecyclerView.Adapter<InfoAdapter.InfoViewHolder>() {
+class InfoAdapter(private val context: Context, private val list: ArrayList<Trailer>) :
+        RecyclerView.Adapter<InfoAdapter.InfoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): InfoViewHolder {
         return InfoViewHolder(LayoutInflater.from(context).inflate(R.layout.layout_item_trailer, parent, false))
@@ -48,7 +49,5 @@ class InfoAdapter(private val context: Context, private val list: ArrayList<Trai
     inner class InfoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgTrailer = itemView.findViewById<ImageView>(R.id.imgTrailer)
         var trailer = itemView.findViewById<TextView>(R.id.trailer)
-
-
     }
 }

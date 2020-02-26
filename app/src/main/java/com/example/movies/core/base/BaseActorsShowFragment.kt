@@ -65,7 +65,7 @@ abstract class BaseActorsShowFragment : BaseFragment(), RetroFitService.ResultCa
         if (!isGridLayoutManager) {
             layoutType = 1
         }
-        adapter = MoviesAdapter(context, castDetails, layoutType)
+        adapter = MoviesAdapter(context!!, castDetails, layoutType)
         recyclerViewActors.adapter = adapter
     }
 

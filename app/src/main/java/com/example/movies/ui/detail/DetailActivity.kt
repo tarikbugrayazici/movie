@@ -74,7 +74,7 @@ class DetailActivity : BaseActivity() {
     }
 
     private fun setAdapter(list: ArrayList<Backdrops>?) {
-        val pagerAdapter = PagerAdapterSlide(this, list)
+        val pagerAdapter = PagerAdapterSlide(this, list!!)
         viewPager.setAdapter(pagerAdapter)
         circularIndicator.setViewPager(viewPager)
     }

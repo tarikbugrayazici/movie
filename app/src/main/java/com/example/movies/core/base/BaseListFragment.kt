@@ -38,8 +38,8 @@ abstract class BaseListFragment : BaseFragment(), RetroFitService.ResultCallBack
 
     fun setRecyclerView() {
         layoutManager = GridLayoutManager(context, 2)
-        recyclerView!!.layoutManager = layoutManager
-        adapter = MovieAdapter(context, list)
+        recyclerView!!.layoutManager = layoutManager as RecyclerView.LayoutManager?
+        adapter = MovieAdapter(context!!, list)
         recyclerView!!.adapter = adapter
     }
 
@@ -54,7 +54,6 @@ abstract class BaseListFragment : BaseFragment(), RetroFitService.ResultCallBack
 
 
     override fun getResult(result: Result<*>) {
-
         val baseEntityResult: Result<BaseEntity> = result as Result<BaseEntity>
         if (baseEntityResult.data != null) {
             setData(baseEntityResult.data!!.results)

@@ -20,6 +20,8 @@ import java.util.ArrayList
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.example.movies.core.extensions.inflate
+import com.example.movies.core.extensions.loadFromUrl
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ActorsAdapter(private val context: Context, private val list: ArrayList<Cast>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -29,11 +31,9 @@ class ActorsAdapter(private val context: Context, private val list: ArrayList<Ca
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_ITEM) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.oyuncular_item, parent, false)
-            return ActorsViewHolder(view)
+            return ActorsViewHolder(parent.inflate(R.layout.oyuncular_item))
         } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.progress_bar, parent, false)
-            return LoadingViewHolder(view)
+            return LoadingViewHolder(parent.inflate(R.layout.progress_bar))
         }
     }
 
@@ -42,10 +42,7 @@ class ActorsAdapter(private val context: Context, private val list: ArrayList<Ca
             val (_, character, _, gender, id, name, _, profile_path) = list[position]
 
             if (profile_path != null) {
-                Glide.with(context)
-                        .load(Constants.IMAGE_BASE_PATH + profile_path)
-                        .centerCrop()
-                        .into(holder.img_castt!!)
+                holder.img_castt!!.loadFromUrl(Constants.IMAGE_BASE_PATH + profile_path)
             } else {
                 var profilePhoto = R.drawable.male
 

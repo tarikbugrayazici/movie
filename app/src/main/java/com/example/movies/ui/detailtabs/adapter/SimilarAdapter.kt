@@ -17,6 +17,9 @@ import java.util.ArrayList
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.example.movies.core.extensions.inflate
+import com.example.movies.core.extensions.loadFromUrl
+import com.example.movies.core.util.Constants
 
 class SimilarAdapter(private val context: Context, private val list: ArrayList<Movie>?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -26,21 +29,17 @@ class SimilarAdapter(private val context: Context, private val list: ArrayList<M
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_ITEM) {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_item_cardview, parent, false)
-            return SimilarViewHolder(view)
+            return SimilarViewHolder(parent.inflate(R.layout.layout_item_cardview))
         } else {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.progress_bar, parent, false)
-            return LoadingViewHolder(view)
+            return LoadingViewHolder(parent.inflate(R.layout.progress_bar))
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is SimilarViewHolder) {
             val (_, _, _, poster_path, id) = list!![position]
-            val url = "https://image.tmdb.org/t/p/w500"
-            Glide.with(context)
-                    .load(url + poster_path!!)
-                    .into(holder.img_view_card_view!!)
-
+            holder.img_view_card_view.loadFromUrl(Constants.IMAGE_BASE_PATH + poster_path)
             holder.itemView.setOnClickListener { Navigation.startDetailActivity(context, id) }
         } else if (holder is LoadingViewHolder) {
             showLoadingView(holder, position)

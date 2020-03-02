@@ -20,20 +20,19 @@ import java.util.ArrayList
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.example.movies.core.extensions.inflate
+import com.example.movies.core.extensions.loadFromUrl
 
 class InfoAdapter(private val context: Context, private val list: ArrayList<Trailer>) :
         RecyclerView.Adapter<InfoAdapter.InfoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): InfoViewHolder {
-        return InfoViewHolder(LayoutInflater.from(context).inflate(R.layout.layout_item_trailer, parent, false))
+        return InfoViewHolder(parent.inflate(R.layout.layout_item_trailer))
     }
 
     override fun onBindViewHolder(holder: InfoViewHolder, position: Int) {
         val trailer = list[position]
-
-        Glide.with(context).load(Constants.TRAILER_BASE_PATH + trailer.key + "/hqdefault.jpg")
-                .placeholder(ColorDrawable(context.resources.getColor(R.color.colorBlack)))
-                .centerCrop().into(holder.imgTrailer!!)
+        holder.imgTrailer!!.loadFromUrl(Constants.TRAILER_BASE_PATH + trailer.key)
         holder.trailer!!.text = trailer.name
         holder.imgTrailer!!.setOnClickListener { v ->
             val intent = Intent(Intent.ACTION_VIEW,

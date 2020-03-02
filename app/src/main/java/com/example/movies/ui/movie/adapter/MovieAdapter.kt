@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import com.bumptech.glide.Glide
 import com.example.movies.R
+import com.example.movies.core.extensions.inflate
+import com.example.movies.core.extensions.loadFromUrl
 import com.example.movies.core.navigation.Navigation.startDetailActivity
 import com.example.movies.core.util.Constants
 import com.example.movies.data.entity.Movie
@@ -19,21 +21,17 @@ class MovieAdapter(private val context: Context, private val list: ArrayList<Mov
     private val VIEW_TYPE_LOADING = 1
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_ITEM) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_item, parent, false)
-            MovieViewHolder(view)
+            MovieViewHolder(parent.inflate(R.layout.layout_item))
         } else {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.progress_bar, parent, false)
-            LoadingViewHolder(view)
+            LoadingViewHolder(parent.inflate(R.layout.progress_bar))
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MovieViewHolder) {
             val movie = list[position]
-            Glide.with(context)
-                    .load(Constants.IMAGE_BASE_PATH + movie!!.poster_path)
-                    .centerCrop()
-                    .into(holder.img_view)
+            holder.img_view.loadFromUrl(Constants.IMAGE_BASE_PATH + movie!!.poster_path)
             holder.itemView.setOnClickListener { startDetailActivity(context, movie.id) }
         } else if (holder is LoadingViewHolder) {
             showLoadingView(holder, position)

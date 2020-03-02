@@ -9,6 +9,8 @@ import android.widget.ImageView
 
 import com.bumptech.glide.Glide
 import com.example.movies.R
+import com.example.movies.core.extensions.inflate
+import com.example.movies.core.extensions.loadFromUrl
 import com.example.movies.core.util.Constants
 import com.example.movies.data.entity.Backdrops
 import com.example.movies.data.entity.Media
@@ -22,11 +24,11 @@ class PagerAdapterSlideActor(private val context: Context, private val list: Arr
         val (_, _, _, poster_path) = list[position]
         val layoutInflater = LayoutInflater.from(context)
         val imgUrl = Constants.IMAGE_BASE_PATH + poster_path!!
-        val viewGroup = layoutInflater.inflate(R.layout.view_pager_item, container, false) as ViewGroup
-        container.addView(viewGroup)
-        val imageView = viewGroup.findViewById<ImageView>(R.id.image)
-        Glide.with(context).load(imgUrl).centerCrop().into(imageView)
-        return viewGroup
+        container.inflate(R.layout.view_pager_item)
+        container.addView(container)
+        val imageView = container.findViewById<ImageView>(R.id.image)
+        imageView.loadFromUrl(imgUrl)
+        return container
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, view: Any) {

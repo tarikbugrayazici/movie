@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.movies.R
+import com.example.movies.core.extensions.inflate
+import com.example.movies.core.extensions.loadFromUrl
 import com.example.movies.core.util.Constants
 import com.example.movies.data.entity.CastDetail
 import java.util.*
@@ -17,28 +19,19 @@ class MoviesAdapter(private val context: Context, private val list: ArrayList<Ca
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View
         if (viewType == GRID) {
-            view = LayoutInflater.from(context).inflate(R.layout.layout_item_cardview, viewGroup, false)
-            return GridLayoutViewHolder(view)
+            return GridLayoutViewHolder(viewGroup.inflate(R.layout.layout_item_cardview))
         } else {
-            view = LayoutInflater.from(context).inflate(R.layout.layout_item_cardview_linear, viewGroup, false)
-            return LinearLayoutViewHolder(view)
+            return LinearLayoutViewHolder(viewGroup.inflate(R.layout.layout_item_cardview_linear))
         }
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         val castDetail = list[position]
         if (viewHolder is GridLayoutViewHolder) {
-            Glide
-                    .with(context)
-                    .load(Constants.IMAGE_BASE_PATH + castDetail.poster_path!!)
-                    .centerCrop()
-                    .into(viewHolder.img_view_card_view!!)
+            viewHolder.img_view_card_view.loadFromUrl(Constants.IMAGE_BASE_PATH + castDetail.poster_path!!)
+
         } else if (viewHolder is LinearLayoutViewHolder) {
-            Glide
-                    .with(context)
-                    .load(Constants.IMAGE_BASE_PATH + castDetail.poster_path!!)
-                    .centerCrop()
-                    .into(viewHolder.img_view_card_view_linear!!)
+            viewHolder.img_view_card_view_linear.loadFromUrl(Constants.IMAGE_BASE_PATH + castDetail.poster_path!!)
         }
     }
 

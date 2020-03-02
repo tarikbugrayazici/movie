@@ -17,18 +17,18 @@ import java.util.ArrayList
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.example.movies.core.extensions.inflate
+import com.example.movies.core.extensions.loadFromUrl
 
 open class SearchTabMovieAdapter(private val context: Context, private val list: ArrayList<Movie>) : RecyclerView.Adapter<SearchTabMovieAdapter.SearchTabMovieAdapterHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchTabMovieAdapterHolder {
-        return SearchTabMovieAdapterHolder(LayoutInflater.from(context)
-                .inflate(R.layout.layout_item, parent, false))
+        return SearchTabMovieAdapterHolder(parent.inflate(R.layout.layout_item))
     }
 
     override fun onBindViewHolder(holder: SearchTabMovieAdapterHolder, position: Int) {
         val (_, _, _, poster_path, id) = list[position]
-        Glide.with(context).load(Constants.IMAGE_BASE_PATH + poster_path!!)
-                .centerCrop().into(holder.img_view!!)
+        holder.img_view!!.loadFromUrl(Constants.IMAGE_BASE_PATH + poster_path!!)
         holder.itemView.setOnClickListener { Navigation.startDetailActivity(context, id) }
 
     }

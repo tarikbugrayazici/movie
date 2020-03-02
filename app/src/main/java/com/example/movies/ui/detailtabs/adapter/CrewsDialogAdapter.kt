@@ -10,6 +10,8 @@ import android.widget.TextView
 
 import com.bumptech.glide.Glide
 import com.example.movies.R
+import com.example.movies.core.extensions.inflate
+import com.example.movies.core.extensions.loadFromUrl
 import com.example.movies.core.util.Constants
 import com.example.movies.data.entity.Crew
 import com.example.movies.data.enums.GenderImage
@@ -20,17 +22,13 @@ import java.util.ArrayList
 class CrewsDialogAdapter(private val context: Context, private val list: ArrayList<Crew>) : RecyclerView.Adapter<CrewsDialogAdapter.CrewsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrewsViewHolder {
-        return CrewsViewHolder(LayoutInflater.from(context).inflate(R.layout.crews_layout_item, parent, false))
+        return CrewsViewHolder(parent.inflate(R.layout.crews_layout_item))
     }
 
     override fun onBindViewHolder(holder: CrewsDialogAdapter.CrewsViewHolder, position: Int) {
         val (_, department, gender, _, _, name, profile_path) = list[position]
         if (profile_path != null) {
-            Glide.with(context)
-                    .load(Constants.IMAGE_BASE_PATH + profile_path)
-                    .placeholder(R.drawable.female)
-                    .centerCrop()
-                    .into(holder.imageView)
+            holder.imageView.loadFromUrl(Constants.IMAGE_BASE_PATH + profile_path)
         } else {
             var profilePhoto = R.drawable.male
 

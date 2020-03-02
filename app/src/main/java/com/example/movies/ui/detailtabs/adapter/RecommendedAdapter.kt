@@ -18,6 +18,8 @@ import java.util.ArrayList
 
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.example.movies.core.extensions.inflate
+import com.example.movies.core.extensions.loadFromUrl
 
 class RecommendedAdapter(private val context: Context?, private val list: ArrayList<Movie?>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -26,22 +28,16 @@ class RecommendedAdapter(private val context: Context?, private val list: ArrayL
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): RecyclerView.ViewHolder {
         if (position == VIEW_TYPE_ITEM) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_item_cardview, parent, false)
-            return RecommendedViewHolder(view)
+            return RecommendedViewHolder(parent.inflate(R.layout.layout_item_cardview))
         } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.progress_bar, parent, false)
-            return LoadingViewHolder(view)
+            return LoadingViewHolder(parent.inflate(R.layout.progress_bar))
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is RecommendedViewHolder) {
-            val recommendedMovie : Movie? = list[position]
-            Glide.with(context)
-                    .load(Constants.IMAGE_BASE_PATH +recommendedMovie!!.poster_path!!)
-                    .centerCrop()
-                    .into(holder.img_view_card_view!!)
-
+            val recommendedMovie: Movie? = list[position]
+            holder.img_view_card_view.loadFromUrl(Constants.IMAGE_BASE_PATH + recommendedMovie!!.poster_path!!)
             holder.itemView.setOnClickListener { Navigation.startDetailActivity(context!!, recommendedMovie!!.id) }
 
         } else if (holder is LoadingViewHolder) {
